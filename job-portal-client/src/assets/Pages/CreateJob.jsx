@@ -110,7 +110,6 @@ const CreateJob = () => {
         <option value="">{t('createJob.placeholders.chooseSalaryType')}</option>
         <option value="Hourly">{t('createJob.hourly')}</option>
         <option value="Monthly">{t('createJob.monthly')}</option>
-        <option value="Yearly">{t('createJob.yearly')}</option>
       </select>
         </div>
         <div className="lg:w-1/2 w-full">
@@ -148,7 +147,9 @@ defaultValue={selectedOption}
 onChange={setSelectedOption}
 options={options}
 isMulti
-className='create-job-input py-4'/>
+className='create-job-input py-4'
+placeholder={t('skills.selectPlaceholder')}
+formatCreateLabel={(inputValue) => t('skills.createLabel', { inputValue })}/>
 </div>
 
 {/* Sixth Row */}
@@ -181,11 +182,17 @@ style={{ resize: 'none' }}/>
 </div>
 
 {/* Last Row */}
-<div className="w-full">
-  <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
-  <input type="email" placeholder={t('createJob.placeholders.postedBy')}
-        {...register("postedBy", { required: true })} className='create-job-input'/>
-
+<div className="create-job-flex">
+  <div className="lg:w-1/2 w-full">
+    <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
+    <input type="email" placeholder={t('createJob.placeholders.postedBy')}
+          {...register("postedBy", { required: true })} className='create-job-input'/>
+  </div>
+  <div className="lg:w-1/2 w-full">
+    <label className='block mb-2 text-lg'>{t('createJob.phone')}</label>
+    <input type="tel" placeholder={t('createJob.placeholders.phone')}
+          {...register("phone")} className='create-job-input'/>
+  </div>
 </div>
 
 

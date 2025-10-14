@@ -3,9 +3,27 @@ import PageHeader from '../../components/PageHeader'
 import { useTranslation } from 'react-i18next';
 
 const SalaryPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [salary, setSalary] = useState([]);
+
+  // Function to convert salary from USD to RUB
+  const convertSalary = (salaryString) => {
+    const currentLang = i18n.language;
+
+    // Extract number from string like "Average Salary $34,331 per year"
+    const match = salaryString.match(/\$([0-9,]+)/);
+    if (!match) return salaryString;
+
+    const usdAmount = parseInt(match[1].replace(/,/g, ''));
+
+    if (currentLang === 'ru') {
+      const rubAmount = Math.round(usdAmount * 90);
+      return `${t('salary.averageSalary')} ${rubAmount.toLocaleString('ru-RU')} ₽ в год`;
+    } else {
+      return `${t('salary.averageSalary')} $${usdAmount.toLocaleString('en-US')} per year`;
+    }
+  };
 
   useEffect ( () => {
     fetch("salary.json").then(res => res.json()).then(data => setSalary(data))
@@ -20,7 +38,7 @@ const SalaryPage = () => {
 
   return (
     <div className='max-w-screen container mx-auto xl:px-24 px-4'>
-        <PageHeader title={t('salary.title')} path={"Salary"}/>
+        <PageHeader title={t('salary.title')} path={t('salary.title')}/>
 
     <div className="mt-5">
         <div className="search-box p-2 text-center mb-2">
@@ -48,10 +66,10 @@ const SalaryPage = () => {
         salary.map((data) => (
           <div key={data.id} className='shadow px-4 py-8'>
             <h4 className="font-semibold text-xl">{data.title}</h4>
-            <p className="my-2 font-medium text-blue text-lg">{data.salary}</p>
+            <p className="my-2 font-medium text-blue text-lg">{convertSalary(data.salary)}</p>
             <div className="flex flex-wrap gap-4">
-              <a href="/" className="font-bold">{data.status}</a>
-              <a href="/" className="font-bold">{data.skills}</a>
+              <a href="/" className="font-bold">{t('salary.jobOpenings')}</a>
+              <a href="/" className="font-bold">{t('salary.skills')}</a>
             </div>
           </div>
         ))

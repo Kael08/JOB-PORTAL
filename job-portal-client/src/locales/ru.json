@@ -59,6 +59,7 @@
     "employmentType": "Тип занятости",
     "description": "Описание вакансии",
     "postedBy": "Электронная почта сотрудника",
+    "phone": "Контактный телефон",
     "submit": "Отправить",
     "hourly": "Почасовая",
     "monthly": "Месячная",
@@ -66,17 +67,18 @@
     "requiredSkills": "Требуемые навыки",
     "placeholders": {
       "jobTitle": "Введите название вакансии",
-      "companyName": "Например: Google",
-      "minSalary": "Например: 3LPA",
-      "maxSalary": "Например: 20LPA",
+      "companyName": "Укажите полное наименование компании работодателя",
+      "minSalary": "Например: 30 000 ₽",
+      "maxSalary": "Например: 500 000 ₽",
       "chooseSalaryType": "Выберите тип оплаты",
-      "jobLocation": "Например: Сиэтл",
+      "jobLocation": "Укажите город или поселок в котором предлагается вакансия",
       "postingDate": "Например: 24-05-30",
       "chooseExperience": "Выберите тип опыта",
       "companyLogo": "Например: URL логотипа вашей компании",
       "chooseEmploymentType": "Выберите тип занятости",
       "description": "Введите описание вакансии",
-      "postedBy": "Например: employee@gmail.com"
+      "postedBy": "Например: employee@gmail.com",
+      "phone": "Например: +7 999 123-45-67"
     },
     "experienceOptions": {
       "fresher": "Без опыта",
@@ -114,7 +116,10 @@
     "title": "Оценка зарплаты",
     "subtitle": "Проверьте информацию о зарплате",
     "searchPlaceholder": "Введите для поиска",
-    "search": "Поиск"
+    "search": "Поиск",
+    "jobOpenings": "Открытые вакансии",
+    "skills": "Навыки",
+    "averageSalary": "Средняя зарплата"
   },
   "jobDetails": {
     "title": "Страница вакансии",
@@ -179,6 +184,43 @@
     "cancel": "Отмена",
     "confirm": "Подтвердить",
     "save": "Сохранить",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "home": "Главная",
+    "page": "Страница",
+    "of": "из"
+  },
+  "employmentTypes": {
+    "Full-Time": "Полная занятость",
+    "Part-Time": "Частичная занятость",
+    "Temporary": "Временная",
+    "Contractual": "Контрактная",
+    "Internship": "Стажировка",
+    "Remote Work": "Удаленная работа"
+  },
+  "jobs": {
+    "jobsCount": "вакансий",
+    "jobsCount_one": "вакансия",
+    "jobsCount_few": "вакансии",
+    "jobsCount_many": "вакансий",
+    "vacancyCount": "{{count}} вакансия",
+    "vacancyCount_one": "{{count}} вакансия",
+    "vacancyCount_few": "{{count}} вакансии",
+    "vacancyCount_many": "{{count}} вакансий",
+    "vacancyCount_other": "{{count}} вакансий",
+    "noDataFound": "Данные не найдены!",
+    "previous": "Назад",
+    "next": "Вперёд"
+  },
+  "skills": {
+    "selectPlaceholder": "Выберите...",
+    "createLabel": "Создать \"{inputValue}\""
+  },
+  "location":{
+    "Elista":"Элиста",
+    "Lagan":"Лагань",
+    "Gorodovikovsk":"Городовиковск",
+    "Elista.en":"Elista",
+    "Lagan.en":"Lagan",
+    "Gorodovikovsk.en":"Gorodovikovsk"
   }
 }

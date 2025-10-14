@@ -1,11 +1,14 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 const PageHeader = ({title, path}) => {
+  const { t } = useTranslation();
+
   return (
     <div className='py-24 mt-3 bg-[#FAFAFA] rounded flex items-center justify-center'>
         <div>
             <h2 className="text-3xl text-blue font-medium mb-1 text-center">{title}</h2>
-        <p className='text-sm text-center'><a href="/" className='font-bold'>Home</a> / {path}</p>
+        <p className='text-sm text-center'><a href="/" className='font-bold'>{t('common.home')}</a> / {path}</p>
         </div>
     </div>
   )

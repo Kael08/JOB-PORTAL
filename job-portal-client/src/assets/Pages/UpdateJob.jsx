@@ -10,7 +10,7 @@ const UpdateJob = () => {
     const {id} = useParams();
     // console.log(id)
     const {_id, jobTitle, companyName, minPrice, maxPrice, salaryType, jobLocation, postingDate,
-        experienceLevel, companyLogo, employmentType, description, postedBy, skills} = useLoaderData();
+        experienceLevel, companyLogo, employmentType, description, postedBy, phone, skills} = useLoaderData();
         const [selectedOption, setSelectedOption] = useState(null);
     const {
         register,
@@ -154,7 +154,9 @@ const UpdateJob = () => {
     onChange={setSelectedOption}
     options={options}
     isMulti
-    className='create-job-input py-4'/>
+    className='create-job-input py-4'
+    placeholder={t('skills.selectPlaceholder')}
+    formatCreateLabel={(inputValue) => t('skills.createLabel', { inputValue })}/>
     </div>
 
     {/* Sixth Row */}
@@ -187,11 +189,17 @@ const UpdateJob = () => {
     </div>
 
     {/* Last Row */}
-    <div className="w-full">
-      <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
-      <input type="email" placeholder={t('createJob.placeholders.postedBy')} defaultValue={postedBy}
-            {...register("postedBy", { required: true })} className='create-job-input'/>
-
+    <div className="create-job-flex">
+      <div className="lg:w-1/2 w-full">
+        <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
+        <input type="email" placeholder={t('createJob.placeholders.postedBy')} defaultValue={postedBy}
+              {...register("postedBy", { required: true })} className='create-job-input'/>
+      </div>
+      <div className="lg:w-1/2 w-full">
+        <label className='block mb-2 text-lg'>{t('createJob.phone')}</label>
+        <input type="tel" placeholder={t('createJob.placeholders.phone')} defaultValue={phone}
+              {...register("phone")} className='create-job-input'/>
+      </div>
     </div>
 
 

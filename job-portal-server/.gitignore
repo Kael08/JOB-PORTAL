@@ -1,3 +1,50 @@
+# Скомпилированные файлы
+/dist
+/node_modules
+*.js.map
+
+# Логи
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Тесты
+/coverage
+/.nyc_output
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - IntelliJ
+.idea
+*.iml
+*.iws
+
+# Переменные окружения
 .env
+.env.local
+.env.development
+.env.test
 .env.production
-node_modules/
+
+# Временные файлы
+*.swp
+*.swo
+*~
+
+# Кэш TypeScript
+*.tsbuildinfo
+
+# Старый Express файл (больше не используется)
+index.js

@@ -4,8 +4,10 @@ import Card from "../../components/Card";
 import Jobs from "./Jobs";
 import Sidebar from "../../sidebar/Sidebar";
 import Newsletter from "../../components/Newsletter";
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+  const { t, i18n } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,9 +120,9 @@ const prevPage = () => {
      <div className="col-span-2 bg-white p-4 rounded-sm"> 
 
       {
-        isLoading ? (<p className="font-medium">Loading...</p>) : result.length > 0 ? (<Jobs result={result}/>) : <>
-        <h3 className="text-lg font-bold mb-2">{result.length} Jobs</h3>
-        <p className="">No Data Found!</p>
+        isLoading ? (<p className="font-medium">{t('common.loading')}</p>) : result.length > 0 ? (<Jobs result={result}/>) : <>
+        <h3 className="text-lg font-bold mb-2">{t('jobs.vacancyCount', { count: result.length })}</h3>
+        <p className="">{t('jobs.noDataFound')}</p>
         </>
       }
 
@@ -130,11 +132,11 @@ const prevPage = () => {
         result.length > 0 ? (
           <div className="flex justify-center mt-4 space-x-8">
             <button onClick={prevPage} disabled={currentPage === 1} className="hover:underline font-bold">
-              Previous
+              {t('jobs.previous')}
             </button>
-            <span className="mx-2">Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)} </span>
+            <span className="mx-2">{t('common.page')} {currentPage} {t('common.of')} {Math.ceil(filteredItems.length / itemsPerPage)} </span>
             <button onClick={nextPage} disabled = {currentPage === Math.ceil(filteredItems.length / itemsPerPage)} className="hover:underline font-bold">
-              Next
+              {t('jobs.next')}
             </button>
           </div>
         ) : ""
