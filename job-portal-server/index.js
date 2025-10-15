@@ -8,11 +8,30 @@ require('dotenv').config()
 // Middleware
 app.use(express.json())
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    process.env.CORS_ORIGIN || "*"  // Временно разрешаем все для тестирования
-  ],
+  origin: function(origin, callback) {
+    // Разрешаем запросы без origin (например, мобильные приложения или curl)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://217.26.25.78",
+      "http://rabota.elistory.ru",
+      "https://rabota.elistory.ru"
+    ];
+
+    // Если CORS_ORIGIN = *, разрешаем все
+    if (process.env.CORS_ORIGIN === "*") {
+      return callback(null, true);
+    }
+
+    // Проверяем, разрешен ли origin
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ["POST", "GET", "PATCH", "DELETE"],
   credentials: true
 }));
