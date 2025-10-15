@@ -29,9 +29,9 @@ export class JobsService {
       INSERT INTO jobs (
         job_title, company_name, company_logo, min_price, max_price,
         salary_type, job_location, posting_date, experience_level,
-        employment_type, description, posted_by, skills
+        employment_type, description, posted_by, skills, phone
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *
     `;
 
@@ -49,6 +49,7 @@ export class JobsService {
       createJobDto.description,
       createJobDto.postedBy,
       skillsArray,
+      createJobDto.phone,
     ];
 
     const result = await this.pool.query(query, values);
@@ -120,8 +121,9 @@ export class JobsService {
           employment_type = COALESCE($10, employment_type),
           description = COALESCE($11, description),
           posted_by = COALESCE($12, posted_by),
-          skills = COALESCE($13, skills)
-      WHERE id = $14
+          skills = COALESCE($13, skills),
+          phone = COALESCE($14, phone)
+      WHERE id = $15
       RETURNING *
     `;
 
@@ -139,6 +141,7 @@ export class JobsService {
       updateJobDto.description,
       updateJobDto.postedBy,
       skillsArray,
+      updateJobDto.phone,
       id,
     ];
 

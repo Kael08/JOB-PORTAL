@@ -25,16 +25,19 @@ const JobDetails = () => {
           });
     }, [id])
 
-    // Convert salary based on language
+    // Format salary in rubles
     const formatSalary = (min, max) => {
       if (!min || !max) return 'N/A';
-      if (i18n.language === 'ru') {
-        const minRub = Math.round(parseFloat(min) * 90);
-        const maxRub = Math.round(parseFloat(max) * 90);
-        return `${minRub.toLocaleString('ru-RU')} ₽ - ${maxRub.toLocaleString('ru-RU')} ₽`;
-      } else {
-        return `$${parseFloat(min).toLocaleString('en-US')} - $${parseFloat(max).toLocaleString('en-US')}`;
-      }
+      const minVal = parseFloat(min);
+      const maxVal = parseFloat(max);
+      return `${Math.round(minVal).toLocaleString('ru-RU')} ₽ - ${Math.round(maxVal).toLocaleString('ru-RU')} ₽`;
+    };
+
+    // Format date to YYYY-MM-DD
+    const formatDate = (dateString) => {
+      if (!dateString) return 'N/A';
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
     };
 
     const handleApply = async() => {
@@ -126,7 +129,7 @@ const JobDetails = () => {
               <FiCalendar className="text-blue text-xl" />
               <div>
                 <p className="text-sm text-gray-600">{t('jobCard.posted')}</p>
-                <p className="font-semibold">{job.postingDate || 'N/A'}</p>
+                <p className="font-semibold">{formatDate(job.postingDate)}</p>
               </div>
             </div>
 

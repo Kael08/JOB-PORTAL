@@ -1,28 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { FiCalendar, FiClock, FiDollarSign, FiMapPin } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiDollarSign, FiMapPin, FiPhone } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
 const Card = ({data}) => {
-const {_id, companyName, jobTitle, companyLogo, minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate, description} = data;
+const {_id, companyName, jobTitle, companyLogo, minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate, description, phone} = data;
 const { i18n, t } = useTranslation();
 
-// Convert salary based on language
+// Format salary in rubles
 const formatSalary = (min, max) => {
-  if (i18n.language === 'ru') {
-    const minRub = Math.round(parseFloat(min) * 90);
-    const maxRub = Math.round(parseFloat(max) * 90);
-    return `${minRub.toLocaleString('ru-RU')} ₽ - ${maxRub.toLocaleString('ru-RU')} ₽`;
-  } else {
-    return `$${parseFloat(min).toLocaleString('en-US')} - $${parseFloat(max).toLocaleString('en-US')}`;
-  }
+  const minVal = parseFloat(min);
+  const maxVal = parseFloat(max);
+  return `${Math.round(minVal).toLocaleString('ru-RU')} ₽ - ${Math.round(maxVal).toLocaleString('ru-RU')} ₽`;
+};
+
+// Format date to YYYY-MM-DD
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0];
 };
 
   return (
    
   <section className="card">
     <Link to={`/job/${_id}`} className='flex gap-4 flex-col sm:flex-row items-start'>
-    <img src={companyLogo} alt="" />
+    <img src={companyLogo} alt="" className="w-16 h-16 object-contain flex-shrink-0" />
     <div className="">
       <h4 className="text-primary mb-1">{companyName}</h4>
       <h3 className="text-lg font-semibold mb-2">{jobTitle}</h3>
@@ -31,7 +34,8 @@ const formatSalary = (min, max) => {
         <span className="flex items-center gap-2"><FiMapPin/> {jobLocation} </span>
         <span className="flex items-center gap-2"><FiClock/> {t(`employmentTypes.${employmentType}`, { defaultValue: employmentType })} </span>
         <span className="flex items-center gap-2"><FiDollarSign/> {formatSalary(minPrice, maxPrice)} </span>
-        <span className="flex items-center gap-2"><FiCalendar/> {postingDate} </span>
+        <span className="flex items-center gap-2"><FiCalendar/> {formatDate(postingDate)} </span>
+        {phone && <span className="flex items-center gap-2"><FiPhone/> {phone} </span>}
       </div>
 
       <p className="text-base text-primary/70"> {description} </p>

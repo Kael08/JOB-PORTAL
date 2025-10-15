@@ -24,7 +24,7 @@ const CreateJob = () => {
         .then((res) => res.json())
         .then((result) => {
           console.log(result);
-          if(result.message === "Job posted successfully"){
+          if(result.message && result.job){
             alert(t('createJob.successMessage'));
             reset()
           } else {

@@ -9,11 +9,6 @@ const Salary = ({handleChange, handleClick}) => {
   return (
     <div>
         <h4 className="text-lg font-medium mb-2">{t('sidebar.salary')}</h4>
-        <div className="mb-4">
-            <Button onClickHandler={handleClick} value="" title={t('sidebar.hourly')} />
-            <Button onClickHandler={handleClick} value="Monthly" title={t('sidebar.monthly')} />
-            <Button onClickHandler={handleClick} value="Yearly" title={t('sidebar.yearly')} />
-        </div>
 
         <div className="">
         <label className='sidebar-label-container'>
@@ -21,17 +16,17 @@ const Salary = ({handleChange, handleClick}) => {
                     type="radio"
                     id="test"
                     name="test"
-                    // placeholder="placeholder"
                     value=""
                     onChange={handleChange}
                 />
                 <span className="checkmark"></span>{t('sidebar.all')}
             </label>
 
-            <InputField handleChange={handleChange} value={30} title="< 300000" name="test2" />
-            <InputField handleChange={handleChange} value={50} title="< 500000" name="test2" />
-            <InputField handleChange={handleChange} value={80} title="< 800000" name="test2" />
-            <InputField handleChange={handleChange} value={100} title="< 1000000" name="test2" />
+            <InputField handleChange={handleChange} value={50000} title="< 50 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={100000} title="< 100 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={150000} title="< 150 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={200000} title="< 200 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={300000} title="< 300 000 ₽" name="test2" />
         </div>
     </div>
   )

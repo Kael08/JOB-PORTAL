@@ -83,16 +83,23 @@ const prevPage = () => {
     //Category Filtering
 
     if(selected) {
-      filteredJobs = filteredJobs.filter(({jobLocation, maxPrice, experienceLevel, salaryType, employmentType, postingDate,
+      filteredJobs = filteredJobs.filter(({jobLocation, minPrice, maxPrice, experienceLevel, salaryType, employmentType, postingDate}) => {
+        // Check if selected is a number (salary filter)
+        const selectedNum = parseInt(selected);
+        if (!isNaN(selectedNum)) {
+          // Filter by salary: show jobs where maxPrice is less than or equal to selected value
+          return parseInt(maxPrice) <= selectedNum;
+        }
 
-      }) =>
-        jobLocation.toLowerCase() === selected.toLowerCase() ||
-        parseInt(maxPrice) <= parseInt(selected) ||
-        postingDate >= selected ||
-        salaryType.toLowerCase() === selected.toLowerCase() ||
-        experienceLevel.toLowerCase() === selected.toLowerCase() ||
-        employmentType.toLowerCase() === selected.toLowerCase()
-      );
+        // Otherwise, filter by other categories
+        return (
+          jobLocation.toLowerCase() === selected.toLowerCase() ||
+          postingDate >= selected ||
+          salaryType.toLowerCase() === selected.toLowerCase() ||
+          experienceLevel.toLowerCase() === selected.toLowerCase() ||
+          employmentType.toLowerCase() === selected.toLowerCase()
+        );
+      });
       console.log(filteredJobs);
     }
 
