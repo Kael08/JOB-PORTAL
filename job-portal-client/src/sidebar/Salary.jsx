@@ -22,11 +22,13 @@ const Salary = ({handleChange, handleClick}) => {
                 <span className="checkmark"></span>{t('sidebar.all')}
             </label>
 
+            <InputField handleChange={handleChange} value={20000} title="< 20 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={30000} title="< 30 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={40000} title="< 40 000 ₽" name="test2" />
             <InputField handleChange={handleChange} value={50000} title="< 50 000 ₽" name="test2" />
-            <InputField handleChange={handleChange} value={100000} title="< 100 000 ₽" name="test2" />
-            <InputField handleChange={handleChange} value={150000} title="< 150 000 ₽" name="test2" />
-            <InputField handleChange={handleChange} value={200000} title="< 200 000 ₽" name="test2" />
-            <InputField handleChange={handleChange} value={300000} title="< 300 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={60000} title="< 60 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={70000} title="< 70 000 ₽" name="test2" />
+            <InputField handleChange={handleChange} value={80000} title="< 80 000 ₽" name="test2" />
         </div>
     </div>
   )

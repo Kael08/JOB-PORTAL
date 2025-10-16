@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { FiCalendar, FiClock, FiDollarSign, FiMapPin, FiPhone } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiMapPin, FiPhone } from 'react-icons/fi';
+import { TbCurrencyRubel } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 
 const Card = ({data}) => {
@@ -33,7 +34,7 @@ const formatDate = (dateString) => {
       <div className="text-primary/70 text-base flex flex-wrap gap-2 mb-2">
         <span className="flex items-center gap-2"><FiMapPin/> {jobLocation} </span>
         <span className="flex items-center gap-2"><FiClock/> {t(`employmentTypes.${employmentType}`, { defaultValue: employmentType })} </span>
-        <span className="flex items-center gap-2"><FiDollarSign/> {formatSalary(minPrice, maxPrice)} </span>
+        <span className="flex items-center gap-2"><TbCurrencyRubel/> {formatSalary(minPrice, maxPrice)} </span>
         <span className="flex items-center gap-2"><FiCalendar/> {formatDate(postingDate)} </span>
         {phone && <span className="flex items-center gap-2"><FiPhone/> {phone} </span>}
       </div>
