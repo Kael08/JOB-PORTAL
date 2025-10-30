@@ -6,7 +6,7 @@
 import { Module, Global, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Pool } from 'pg';
-import { getDatabaseConfig } from '../config/database.config';
+import { getDatabaseConfig } from './database.config';
 
 /**
  * Токен для инъекции пула соединений БД

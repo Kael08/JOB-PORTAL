@@ -5,7 +5,7 @@
 
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { Pool } from 'pg';
-import { DATABASE_POOL } from '../../database/database.module';
+import { DATABASE_POOL } from '../../common/db/database.module';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Job } from './entities/job.entity';

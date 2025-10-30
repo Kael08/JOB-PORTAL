@@ -5,10 +5,10 @@
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
-import { JobsModule } from './modules/jobs/jobs.module';
-import { ApplicationsModule } from './modules/applications/applications.module';
-import { AppController } from './app.controller';
+import { DatabaseModule } from './common/db/database.module';
+import { JobsModule } from './domains/jobs/jobs.module';
+import { ApplicationsModule } from './domains/applications/applications.module';
+import { AppController } from './gateways/api/app.controller';
 
 @Module({
   imports: [
