@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const MyJobs = () => {
+const MyJobsPage = () => {
     const { t } = useTranslation();
     const [jobs, setJobs] = useState([]);
     const [searchText, setSearchText] = useState("");
@@ -211,4 +211,4 @@ const itemsPerPage = 4;
   )
 };
 
-export default MyJobs
+export default MyJobsPage

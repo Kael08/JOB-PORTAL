@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from "react-select/creatable";
 import { useTranslation } from 'react-i18next';
 
-const UpdateJob = () => {
+const UpdateJobPage = () => {
     const { t } = useTranslation();
     const {id} = useParams();
     // console.log(id)
@@ -210,4 +210,4 @@ const UpdateJob = () => {
   )
 }
 
-export default UpdateJob
+export default UpdateJobPage

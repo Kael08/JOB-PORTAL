@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from "react-select/creatable";
 import { useTranslation } from 'react-i18next';
 
-const CreateJob = () => {
+const CreateJobPage = () => {
     const { t } = useTranslation();
     const [selectedOption, setSelectedOption] = useState(null);
     const {
@@ -203,4 +203,4 @@ style={{ resize: 'none' }}/>
   )
 }
 
-export default CreateJob
+export default CreateJobPage

@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Import useNavigate hook
 import { useTranslation } from 'react-i18next';
 
-import app from '../firebase/firebase.config'; // Import Firebase configuration
+import app from '../../services/firebase/firebase.config'; // Import Firebase configuration
 
-const Signup = () => {
+const SignupPage = () => {
   const { t } = useTranslation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -126,4 +126,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupPage;

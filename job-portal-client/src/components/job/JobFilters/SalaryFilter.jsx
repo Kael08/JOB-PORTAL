@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Button from './Button'
-import InputField from '../components/InputField'
+import Button from '../../ui/Button'
+import InputField from '../../ui/InputField'
 
-const Salary = ({handleChange, handleClick}) => {
+const SalaryFilter = ({handleChange, handleClick}) => {
   const { t } = useTranslation();
 
   return (
@@ -34,4 +34,4 @@ const Salary = ({handleChange, handleClick}) => {
   )
 }
 
-export default Salary
+export default SalaryFilter

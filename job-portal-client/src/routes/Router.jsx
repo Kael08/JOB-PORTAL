@@ -1,29 +1,29 @@
 import {createBrowserRouter} from "react-router-dom";
 import App from "../App";
-import Home from "../assets/Pages/Home";
-import About from "../assets/Pages/About";
-import CreateJob from "../assets/Pages/CreateJob";
-import MyJobs from "../assets/Pages/MyJobs";
-import SalaryPage from "../assets/Pages/SalaryPage";
-import UpdateJob from "../assets/Pages/UpdateJob";
-import Login from "../components/Login";
-import JobDetails from "../assets/Pages/JobDetails";
-import Signup from "../components/Signup";
+import HomePage from "../pages/home/HomePage";
+import AboutPage from "../pages/about/AboutPage";
+import CreateJobPage from "../pages/jobs/CreateJobPage";
+import MyJobsPage from "../pages/jobs/MyJobsPage";
+import SalaryPage from "../pages/salary/SalaryPage";
+import UpdateJobPage from "../pages/jobs/UpdateJobPage";
+import LoginPage from "../pages/auth/LoginPage";
+import JobDetailsPage from "../pages/jobs/JobDetailsPage";
+import SignupPage from "../pages/auth/SignupPage";
 
 const router = createBrowserRouter([
     {
       path: "/",
       element: <App/>,
       children: [
-        {path: "/", element: <Home/>},
+        {path: "/", element: <HomePage/>},
         {
           path: "/post-job",
-          element: <CreateJob/>
+          element: <CreateJobPage/>
         },
-        
+
         {
           path: "/my-job",
-          element: <MyJobs/>
+          element: <MyJobsPage/>
         },
         {
           path: "/salary",
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         },
         {
           path: "/edit-job/:id",
-          element: <UpdateJob/>,
+          element: <UpdateJobPage/>,
           loader: ({params}) => {
             const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
             return fetch(`${apiUrl}/all-jobs/${params.id}`);
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         },
         {
           path: "/job/:id",
-          element: <JobDetails/>
+          element: <JobDetailsPage/>
         }
 
     ],
@@ -47,11 +47,11 @@ const router = createBrowserRouter([
 
     {
       path: "/login",
-      element: <Login/>
+      element: <LoginPage/>
     },
     {
       path: "/sign-up",
-      element: <Signup/>
+      element: <SignupPage/>
     }
 
   ]);

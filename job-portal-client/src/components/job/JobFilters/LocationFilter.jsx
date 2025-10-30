@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import InputField from '../components/InputField'
+import InputField from '../../ui/InputField'
 
-const Location = ({handleChange}) => {
+const LocationFilter = ({handleChange}) => {
   const { t } = useTranslation();
 
   return (
@@ -30,4 +30,4 @@ const Location = ({handleChange}) => {
   )
 }
 
-export default Location
+export default LocationFilter

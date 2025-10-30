@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Import SweetAlert2 for notifications (optional)
 import { useTranslation } from 'react-i18next';
 
-import app from '../firebase/firebase.config'; // Import your Firebase configuration
+import app from '../../services/firebase/firebase.config'; // Import your Firebase configuration
 
-const Login = () => {
+const LoginPage = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState(null); // State to store user data
   const auth = getAuth();
@@ -85,4 +85,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

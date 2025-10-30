@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import InputField from '../components/InputField'
+import InputField from '../../ui/InputField'
 
-const EmploymentType = ({handleChange}) => {
+const EmploymentTypeFilter = ({handleChange}) => {
   const { t } = useTranslation();
 
   return (
@@ -30,4 +30,4 @@ const EmploymentType = ({handleChange}) => {
   )
 }
 
-export default EmploymentType
+export default EmploymentTypeFilter

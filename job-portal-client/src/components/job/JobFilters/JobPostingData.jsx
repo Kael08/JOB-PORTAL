@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import InputField from '../components/InputField';
+import InputField from '../../ui/InputField';
 
 const JobPostingData = ({handleChange}) => {
 const { t } = useTranslation();

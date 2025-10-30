@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Banner from "../../components/Banner"
-import Card from "../../components/Card";
-import Jobs from "./Jobs";
-import Sidebar from "../../sidebar/Sidebar";
-import Newsletter from "../../components/Newsletter";
+import JobSearchBar from "../../components/job/JobSearchBar"
+import JobCard from "../../components/job/JobCard";
+import Jobs from "./components/Jobs";
+import JobFilters from "../../components/job/JobFilters";
+import Newsletter from "./components/Newsletter";
 import { useTranslation } from 'react-i18next';
 
-const Home = () => {
+const HomePage = () => {
   const { t, i18n } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [jobs, setJobs] = useState([]);
@@ -107,20 +107,20 @@ const prevPage = () => {
     const {startIndex, endIndex} = calculatePageRange();
     filteredJobs = filteredJobs.slice(startIndex, endIndex)
 
-    return filteredJobs.map((data, i) => <Card key ={i} data={data}/>)
+    return filteredJobs.map((data, i) => <JobCard key ={i} data={data}/>)
   }
 
   const result = filteredData(jobs, selectedCategory, query);
 
   return (
     <div>
-      <Banner query={query} handleInputChange={handleInputChange} />
+      <JobSearchBar query={query} handleInputChange={handleInputChange} />
     
     {/* Main Content */}
     <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
       {/* Left Side */}
      <div className="bg-white p-4 rounded">
-      <Sidebar handleChange={handleChange} handleClick={handleClick}/>
+      <JobFilters handleChange={handleChange} handleClick={handleClick}/>
      </div>
 
      {/* Jobs Cards */}
@@ -159,4 +159,4 @@ const prevPage = () => {
   )
 }
 
-export default Home
+export default HomePage

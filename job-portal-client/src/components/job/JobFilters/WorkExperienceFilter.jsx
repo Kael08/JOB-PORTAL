@@ -1,8 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import InputField from '../components/InputField'
+import InputField from '../../ui/InputField'
 
-const WorkExperience = ({handleChange}) => {
+const WorkExperienceFilter = ({handleChange}) => {
   const { t } = useTranslation();
 
   return (
@@ -29,4 +29,4 @@ const WorkExperience = ({handleChange}) => {
   )
 }
 
-export default WorkExperience
+export default WorkExperienceFilter

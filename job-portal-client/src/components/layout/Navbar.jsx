@@ -3,8 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import {FaBarsStaggered, FaXmark} from "react-icons/fa6";
 import { useTranslation } from 'react-i18next';
 
-import LogoutButton from './LogoutButton'; // Import LogoutButton
-// Import LogoutButton
+import LogoutButton from '../auth/LogoutButton';
 
 const Navbar = () => {
     const { t, i18n } = useTranslation();

@@ -4,7 +4,7 @@ import { FiCalendar, FiClock, FiMapPin, FiPhone } from 'react-icons/fi';
 import { TbCurrencyRubel } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 
-const Card = ({data}) => {
+const JobCard = ({data}) => {
 const {_id, companyName, jobTitle, companyLogo, minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate, description, phone} = data;
 const { i18n, t } = useTranslation();
 
@@ -46,4 +46,4 @@ const formatDate = (dateString) => {
   )
 }
 
-export default Card
+export default JobCard

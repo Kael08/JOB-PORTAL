@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import PageHeader from '../../components/PageHeader'
+import PageHeader from '../../components/layout/PageHeader'
 import { FiCalendar, FiClock, FiDollarSign, FiMapPin, FiPhone, FiMail, FiBriefcase } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
-const JobDetails = () => {
+const JobDetailsPage = () => {
     const { t, i18n } = useTranslation();
     const {id} = useParams();
     const [job, setJob] = useState(null)
@@ -191,4 +191,4 @@ const JobDetails = () => {
   )
 }
 
-export default JobDetails
+export default JobDetailsPage

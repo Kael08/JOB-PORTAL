@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {FiMapPin, FiSearch} from "react-icons/fi"
 import { useTranslation } from 'react-i18next'
 
-const Banner = ({query, handleInputChange }) => {
+const JobSearchBar = ({query, handleInputChange }) => {
   const { t } = useTranslation();
 
   return (
@@ -48,4 +48,4 @@ const Banner = ({query, handleInputChange }) => {
   )
 }
 
-export default Banner
+export default JobSearchBar
