@@ -34,7 +34,7 @@ const formatDate = (dateString) => {
       <div className="text-primary/70 text-base flex flex-wrap gap-2 mb-2">
         <span className="flex items-center gap-2"><FiMapPin/> {jobLocation} </span>
         <span className="flex items-center gap-2"><FiClock/> {t(`employmentTypes.${employmentType}`, { defaultValue: employmentType })} </span>
-        <span className="flex items-center gap-2"><TbCurrencyRubel/> {formatSalary(minPrice, maxPrice)} </span>
+        <span className="flex items-center gap-2"> {formatSalary(minPrice, maxPrice)} </span>
         <span className="flex items-center gap-2"><FiCalendar/> {formatDate(postingDate)} </span>
         {phone && <span className="flex items-center gap-2"><FiPhone/> {phone} </span>}
       </div>

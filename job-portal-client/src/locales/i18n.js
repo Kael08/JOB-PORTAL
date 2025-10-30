@@ -4,7 +4,7 @@ import enTranslation from './en.json';
 import ruTranslation from './ru.json';
 
 // Get saved language from localStorage or default to 'en'
-const savedLanguage = localStorage.getItem('language') || 'en';
+const savedLanguage = localStorage.getItem('language') || 'ru';
 
 i18n
   .use(initReactI18next)
