@@ -28,10 +28,10 @@ export class JobsService {
     const query = `
       INSERT INTO jobs (
         job_title, company_name, company_logo, min_price, max_price,
-        salary_type, job_location, posting_date, experience_level,
+        salary_type, city, street, apartment, posting_date, experience_level,
         employment_type, description, posted_by, skills, phone
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
       RETURNING *
     `;
 
@@ -42,7 +42,9 @@ export class JobsService {
       createJobDto.minPrice,
       createJobDto.maxPrice,
       createJobDto.salaryType,
-      createJobDto.jobLocation,
+      createJobDto.city,
+      createJobDto.street,
+      createJobDto.apartment,
       createJobDto.postingDate,
       createJobDto.experienceLevel,
       createJobDto.employmentType,
@@ -115,15 +117,17 @@ export class JobsService {
           min_price = COALESCE($4, min_price),
           max_price = COALESCE($5, max_price),
           salary_type = COALESCE($6, salary_type),
-          job_location = COALESCE($7, job_location),
-          posting_date = COALESCE($8, posting_date),
-          experience_level = COALESCE($9, experience_level),
-          employment_type = COALESCE($10, employment_type),
-          description = COALESCE($11, description),
-          posted_by = COALESCE($12, posted_by),
-          skills = COALESCE($13, skills),
-          phone = COALESCE($14, phone)
-      WHERE id = $15
+          city = COALESCE($7, city),
+          street = COALESCE($8, street),
+          apartment = COALESCE($9, apartment),
+          posting_date = COALESCE($10, posting_date),
+          experience_level = COALESCE($11, experience_level),
+          employment_type = COALESCE($12, employment_type),
+          description = COALESCE($13, description),
+          posted_by = COALESCE($14, posted_by),
+          skills = COALESCE($15, skills),
+          phone = COALESCE($16, phone)
+      WHERE id = $17
       RETURNING *
     `;
 
@@ -134,7 +138,9 @@ export class JobsService {
       updateJobDto.minPrice,
       updateJobDto.maxPrice,
       updateJobDto.salaryType,
-      updateJobDto.jobLocation,
+      updateJobDto.city,
+      updateJobDto.street,
+      updateJobDto.apartment,
       updateJobDto.postingDate,
       updateJobDto.experienceLevel,
       updateJobDto.employmentType,

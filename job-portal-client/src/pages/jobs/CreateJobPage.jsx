@@ -6,6 +6,10 @@ import { useTranslation } from 'react-i18next';
 const CreateJobPage = () => {
     const { t } = useTranslation();
     const [selectedOption, setSelectedOption] = useState(null);
+
+    // Доступные города для выбора
+    const cities = ["Elista", "Lagan", "Gorodovikovsk"];
+
     const {
         register,
         handleSubmit,reset,
@@ -127,9 +131,27 @@ const CreateJobPage = () => {
       </select>
         </div>
         <div className="lg:w-1/2 w-full">
-        <label className='block mb-2 text-lg'>{t('createJob.jobLocation')}</label>
-        <input type="text" placeholder={t('createJob.placeholders.jobLocation')}
-        {...register("jobLocation", { required: true })} className='create-job-input'/>
+        <label className='block mb-2 text-lg'>{t('createJob.city')}</label>
+        <select {...register("city", { required: true })} className='create-job-input'>
+        <option value="">{t('createJob.placeholders.chooseCity')}</option>
+        {cities.map((city) => (
+          <option key={city} value={city}>{t(`location.${city}`)}</option>
+        ))}
+      </select>
+        </div>
+    </div>
+
+    {/* Address Row - Street and Apartment */}
+    <div className="create-job-flex">
+        <div className="lg:w-1/2 w-full">
+        <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
+        <input type="text" placeholder={t('createJob.placeholders.street')}
+        {...register("street", { required: true })} className='create-job-input'/>
+        </div>
+        <div className="lg:w-1/2 w-full">
+        <label className='block mb-2 text-lg'>{t('createJob.apartment')}</label>
+        <input type="text" placeholder={t('createJob.placeholders.apartment')}
+        {...register("apartment", { required: true })} className='create-job-input'/>
         </div>
     </div>
 
@@ -152,7 +174,7 @@ const CreateJobPage = () => {
         </div>
     </div>
 
-    {/* Fifth Row */}
+    {/* Sixth Row */}
 
 <div className="">
 <label className='block mb-2 text-lg'>{t('createJob.requiredSkills')}</label>
@@ -184,7 +206,7 @@ formatCreateLabel={(inputValue) => t('skills.createLabel', { inputValue })}/>
         </div>
     </div>
 
-{/* 7th Row */}
+{/* 8th Row */}
 <div className="w-full">
 <label className='block mb-2 text-lg'>{t('createJob.description')}</label>
 <textarea className='w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-700'

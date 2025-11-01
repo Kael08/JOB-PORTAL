@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enTranslation from './en.json';
 import ruTranslation from './ru.json';
+import klmTranslation from './klm.json'
 
 // Get saved language from localStorage or default to 'en'
 const savedLanguage = localStorage.getItem('language') || 'ru';
@@ -10,15 +11,15 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: {
-        translation: enTranslation
+      klm: {
+        translation: klmTranslation
       },
       ru: {
         translation: ruTranslation
       }
     },
     lng: savedLanguage, // default language
-    fallbackLng: 'en',
+    fallbackLng: 'klm',
     interpolation: {
       escapeValue: false // react already safes from xss
     },

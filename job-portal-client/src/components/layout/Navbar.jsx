@@ -58,13 +58,13 @@ const Navbar = () => {
                 <Link to = "/login" className='py-2 px-5 border rounded'>{t('navbar.login')}</Link>
                 <Link to = "/sign-up" className='py-2 px-5 border rounded bg-blue text-white'>{t('navbar.signup')}</Link>
                 {/* Language Switcher */}
-                {/* {<button
-                    onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}
+                {<button
+                    onClick={() => changeLanguage(i18n.language === 'klm' ? 'ru' : 'klm')}
                     className='py-2 px-5 border rounded bg-gray-100 hover:bg-gray-200 transition-colors'
-                    title={i18n.language === 'en' ? 'Switch to Russian' : 'Переключить на английский'}
+                    title={i18n.language === 'en' ? 'Switch to Russian' : 'Переключить на калмыцкий'}
                 >
-                    {i18n.language === 'en' ? 'RU' : 'EN'}
-                </button>} */}
+                    {i18n.language === 'klm' ? 'RU' : 'KLM'}
+                </button>}
                 
             </div>
 

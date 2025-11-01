@@ -43,10 +43,20 @@ export class CreateJobDto {
   @IsOptional()
   salaryType?: string;
 
-  /** Местоположение работы (необязательное) */
-  @IsString()
-  @IsOptional()
-  jobLocation?: string;
+  /** Город (обязательное) */
+  @IsString({ message: 'Город должен быть строкой' })
+  @IsNotEmpty({ message: 'Город обязателен' })
+  city: string;
+
+  /** Улица (обязательное) */
+  @IsString({ message: 'Улица должна быть строкой' })
+  @IsNotEmpty({ message: 'Улица обязательна' })
+  street: string;
+
+  /** Номер апартамента (обязательное) */
+  @IsString({ message: 'Номер апартамента должен быть строкой' })
+  @IsNotEmpty({ message: 'Номер апартамента обязателен' })
+  apartment: string;
 
   /** Дата публикации (необязательное) */
   @IsDateString({}, { message: 'Неверный формат даты' })

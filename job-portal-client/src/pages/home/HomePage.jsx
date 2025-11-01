@@ -83,7 +83,7 @@ const prevPage = () => {
     //Category Filtering
 
     if(selected) {
-      filteredJobs = filteredJobs.filter(({jobLocation, minPrice, maxPrice, experienceLevel, salaryType, employmentType, postingDate}) => {
+      filteredJobs = filteredJobs.filter(({city, minPrice, maxPrice, experienceLevel, salaryType, employmentType, postingDate}) => {
         // Check if selected is a number (salary filter)
         const selectedNum = parseInt(selected);
         if (!isNaN(selectedNum)) {
@@ -93,7 +93,7 @@ const prevPage = () => {
 
         // Otherwise, filter by other categories
         return (
-          jobLocation.toLowerCase() === selected.toLowerCase() ||
+          city.toLowerCase() === selected.toLowerCase() ||
           postingDate >= selected ||
           salaryType.toLowerCase() === selected.toLowerCase() ||
           experienceLevel.toLowerCase() === selected.toLowerCase() ||

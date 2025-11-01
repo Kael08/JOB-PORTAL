@@ -9,9 +9,12 @@ const UpdateJobPage = () => {
     const { t } = useTranslation();
     const {id} = useParams();
     // console.log(id)
-    const {_id, jobTitle, companyName, minPrice, maxPrice, salaryType, jobLocation, postingDate,
+    const {_id, jobTitle, companyName, minPrice, maxPrice, salaryType, city, street, apartment, postingDate,
         experienceLevel, companyLogo, employmentType, description, postedBy, phone, skills} = useLoaderData();
         const [selectedOption, setSelectedOption] = useState(null);
+
+    // Доступные города для выбора
+    const cities = ["Elista", "Lagan", "Gorodovikovsk"];
     const {
         register,
         handleSubmit,reset,
@@ -135,9 +138,27 @@ const UpdateJobPage = () => {
           </select>
             </div>
             <div className="lg:w-1/2 w-full">
-            <label className='block mb-2 text-lg'>{t('createJob.jobLocation')}</label>
-            <input type="text" placeholder={t('createJob.placeholders.jobLocation')} defaultValue={jobLocation}
-            {...register("jobLocation", { required: true })} className='create-job-input'/>
+            <label className='block mb-2 text-lg'>{t('createJob.city')}</label>
+            <select {...register("city", { required: true })} className='create-job-input'>
+            <option value={city}>{t(`location.${city}`)}</option>
+            {cities.filter(c => c !== city).map((cityOption) => (
+              <option key={cityOption} value={cityOption}>{t(`location.${cityOption}`)}</option>
+            ))}
+          </select>
+            </div>
+        </div>
+
+        {/* Address Row - Street and Apartment */}
+        <div className="create-job-flex">
+            <div className="lg:w-1/2 w-full">
+            <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
+            <input type="text" placeholder={t('createJob.placeholders.street')} defaultValue={street}
+            {...register("street", { required: true })} className='create-job-input'/>
+            </div>
+            <div className="lg:w-1/2 w-full">
+            <label className='block mb-2 text-lg'>{t('createJob.apartment')}</label>
+            <input type="text" placeholder={t('createJob.placeholders.apartment')} defaultValue={apartment}
+            {...register("apartment", { required: true })} className='create-job-input'/>
             </div>
         </div>
 
@@ -192,7 +213,7 @@ const UpdateJobPage = () => {
             </div>
         </div>
 
-    {/* 7th Row */}
+    {/* 8th Row */}
     <div className="w-full">
     <label className='block mb-2 text-lg'>{t('createJob.description')}</label>
     <textarea className='w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-700'

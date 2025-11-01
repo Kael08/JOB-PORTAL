@@ -52,7 +52,6 @@
     "minSalary": "Минимальная зарплата",
     "maxSalary": "Максимальная зарплата",
     "salaryType": "Тип оплаты",
-    "jobLocation": "Местоположение",
     "jobPosting": "Дата публикации",
     "experience": "Уровень опыта",
     "companyLogo": "Логотип компании",
@@ -71,14 +70,16 @@
       "minSalary": "Например: 30 000 ₽",
       "maxSalary": "Например: 500 000 ₽",
       "chooseSalaryType": "Выберите тип оплаты",
-      "jobLocation": "Укажите город или поселок в котором предлагается вакансия",
       "postingDate": "Например: 24-05-30",
       "chooseExperience": "Выберите тип опыта",
       "companyLogo": "Например: URL логотипа вашей компании",
       "chooseEmploymentType": "Выберите тип занятости",
       "description": "Введите описание вакансии",
       "postedBy": "Например: employee@gmail.com",
-      "phone": "Например: +7 999 123-45-67"
+      "phone": "Например: +7 999 123-45-67",
+      "chooseCity": "Выберите город",
+      "street": "Например: ул. Ленина",
+      "apartment": "Например: 10 или офис 5"
     },
     "experienceOptions": {
       "fresher": "Без опыта",
@@ -93,7 +94,10 @@
     "successMessage": "Вакансия успешно размещена",
     "updateSuccessMessage": "Вакансия успешно обновлена",
     "errorMessage": "Не удалось разместить вакансию",
-    "updateErrorMessage": "Не удалось обновить вакансию"
+    "updateErrorMessage": "Не удалось обновить вакансию",
+    "city": "Город",
+    "street": "Улица",
+    "apartment": "Номер апартамента"
   },
   "myJobs": {
     "title": "МОИ ВАКАНСИИ",
@@ -215,12 +219,12 @@
     "selectPlaceholder": "Выберите...",
     "createLabel": "Создать \"{inputValue}\""
   },
-  "location":{
-    "Elista":"Элиста",
-    "Lagan":"Лагань",
-    "Gorodovikovsk":"Городовиковск",
-    "Elista.en":"Elista",
-    "Lagan.en":"Lagan",
-    "Gorodovikovsk.en":"Gorodovikovsk"
+  "location": {
+    "Elista": "Элиста",
+    "Lagan": "Лагань",
+    "Gorodovikovsk": "Городовиковск",
+    "Elista.en": "Elista",
+    "Lagan.en": "Lagan",
+    "Gorodovikovsk.en": "Gorodovikovsk"
   }
 }

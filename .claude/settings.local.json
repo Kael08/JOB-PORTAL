@@ -4,7 +4,15 @@
       "Bash(mkdir:*)",
       "Bash(npm install:*)",
       "Bash(npm run build)",
-      "Read(//d/backend-nestjs/src/**)"
+      "Read(//d/backend-nestjs/src/**)",
+      "Bash(psql:*)",
+      "Bash(node -e:*)",
+      "Bash(curl:*)",
+      "Bash(npm run start:dev:*)",
+      "Bash(cat:*)",
+      "Bash(netstat:*)",
+      "Bash(awk:*)",
+      "Bash(taskkill //F //PID 10052)"
     ],
     "deny": [],
     "ask": []

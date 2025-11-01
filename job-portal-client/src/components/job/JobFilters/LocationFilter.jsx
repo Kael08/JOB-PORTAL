@@ -23,7 +23,7 @@ const LocationFilter = ({handleChange}) => {
             </label>
 
             <InputField handleChange={handleChange} value={t('location.Elista.en')} title={t('location.Elista')} name="test" />
-            <InputField handleChange={handleChange} value={t('location.Elista.en')} title={t('location.Lagan')} name="test" />
+            <InputField handleChange={handleChange} value={t('location.Lagan.en')} title={t('location.Lagan')} name="test" />
             <InputField handleChange={handleChange} value={t('location.Gorodovikovsk.en')} title={t('location.Gorodovikovsk')} name="test" />
         </div>
     </div>

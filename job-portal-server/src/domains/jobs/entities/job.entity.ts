@@ -25,8 +25,14 @@ export class Job {
   /** Тип зарплаты (почасовая, месячная, годовая) */
   salaryType?: string;
 
-  /** Местоположение работы */
-  jobLocation?: string;
+  /** Город */
+  city: string;
+
+  /** Улица */
+  street: string;
+
+  /** Номер апартамента */
+  apartment: string;
 
   /** Дата публикации вакансии */
   postingDate?: Date;

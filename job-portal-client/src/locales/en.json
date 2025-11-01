@@ -52,7 +52,6 @@
     "minSalary": "Minimum Salary",
     "maxSalary": "Maximum Salary",
     "salaryType": "Salary Type",
-    "jobLocation": "Job Location",
     "jobPosting": "Job Posting Date",
     "experience": "Experience Level",
     "companyLogo": "Company Logo",
@@ -71,14 +70,16 @@
       "minSalary": "Ex: 30 000 ₽",
       "maxSalary": "Ex: 500 000 ₽",
       "chooseSalaryType": "Choose Salary Type",
-      "jobLocation": "Specify the city or village where the job is offered",
       "postingDate": "Ex: 24-05-30",
       "chooseExperience": "Choose Experience Type",
       "companyLogo": "Ex: Your Company Logo URL",
       "chooseEmploymentType": "Choose Employment Type",
       "description": "Enter Job Description",
       "postedBy": "Ex: employee@gmail.com",
-      "phone": "Ex: +7 999 123-45-67"
+      "phone": "Ex: +7 999 123-45-67",
+      "chooseCity": "Choose City",
+      "street": "Ex: Lenin Street",
+      "apartment": "Ex: 10 or office 5"
     },
     "experienceOptions": {
       "fresher": "Fresher",
@@ -93,7 +94,10 @@
     "successMessage": "Job Posted Successfully",
     "updateSuccessMessage": "Job Updated Successfully",
     "errorMessage": "Failed to post job",
-    "updateErrorMessage": "Failed to update job"
+    "updateErrorMessage": "Failed to update job",
+    "city": "City",
+    "street": "Street",
+    "apartment": "Apartment Number"
   },
   "myJobs": {
     "title": "MY JOBS",
@@ -213,12 +217,12 @@
     "selectPlaceholder": "Select...",
     "createLabel": "Create \"{inputValue}\""
   },
-  "location":{
-    "Elista":"Elista",
-    "Lagan":"Lagan",
-    "Gorodovikovsk":"Gorodovikovsk",
-    "Elista.en":"Elista",
-    "Lagan.en":"Lagan",
-    "Gorodovikovsk.en":"Gorodovikovsk"
+  "location": {
+    "Elista": "Elista",
+    "Lagan": "Lagan",
+    "Gorodovikovsk": "Gorodovikovsk",
+    "Elista.en": "Elista",
+    "Lagan.en": "Lagan",
+    "Gorodovikovsk.en": "Gorodovikovsk"
   }
 }

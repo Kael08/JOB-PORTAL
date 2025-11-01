@@ -5,7 +5,7 @@ import { TbCurrencyRubel } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 
 const JobCard = ({data}) => {
-const {_id, companyName, jobTitle, companyLogo, minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate, description, phone} = data;
+const {_id, companyName, jobTitle, companyLogo, minPrice, maxPrice, salaryType, city, street, apartment, employmentType, postingDate, description, phone} = data;
 const { i18n, t } = useTranslation();
 
 // Format salary in rubles
@@ -32,7 +32,7 @@ const formatDate = (dateString) => {
       <h3 className="text-lg font-semibold mb-2">{jobTitle}</h3>
 
       <div className="text-primary/70 text-base flex flex-wrap gap-2 mb-2">
-        <span className="flex items-center gap-2"><FiMapPin/> {jobLocation} </span>
+        <span className="flex items-center gap-2"><FiMapPin/> {t(`location.${city}`)}, {street}, {apartment} </span>
         <span className="flex items-center gap-2"><FiClock/> {t(`employmentTypes.${employmentType}`, { defaultValue: employmentType })} </span>
         <span className="flex items-center gap-2"> {formatSalary(minPrice, maxPrice)} </span>
         <span className="flex items-center gap-2"><FiCalendar/> {formatDate(postingDate)} </span>
