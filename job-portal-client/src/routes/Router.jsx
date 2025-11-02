@@ -3,12 +3,10 @@ import App from "../App";
 import HomePage from "../pages/home/HomePage";
 import AboutPage from "../pages/about/AboutPage";
 import CreateJobPage from "../pages/jobs/CreateJobPage";
-import MyJobsPage from "../pages/jobs/MyJobsPage";
-import SalaryPage from "../pages/salary/SalaryPage";
 import UpdateJobPage from "../pages/jobs/UpdateJobPage";
 import LoginPage from "../pages/auth/LoginPage";
 import JobDetailsPage from "../pages/jobs/JobDetailsPage";
-import SignupPage from "../pages/auth/SignupPage";
+import ProfilePage from "../pages/profile/ProfilePage";
 
 const router = createBrowserRouter([
     {
@@ -19,15 +17,6 @@ const router = createBrowserRouter([
         {
           path: "/post-job",
           element: <CreateJobPage/>
-        },
-
-        {
-          path: "/my-job",
-          element: <MyJobsPage/>
-        },
-        {
-          path: "/salary",
-          element: <SalaryPage/>
         },
         {
           path: "/edit-job/:id",
@@ -40,6 +29,14 @@ const router = createBrowserRouter([
         {
           path: "/job/:id",
           element: <JobDetailsPage/>
+        },
+        {
+          path: "/profile",
+          element: <ProfilePage/>
+        },
+        {
+          path: "/about",
+          element: <AboutPage/>
         }
 
     ],
@@ -48,10 +45,6 @@ const router = createBrowserRouter([
     {
       path: "/login",
       element: <LoginPage/>
-    },
-    {
-      path: "/sign-up",
-      element: <SignupPage/>
     }
 
   ]);

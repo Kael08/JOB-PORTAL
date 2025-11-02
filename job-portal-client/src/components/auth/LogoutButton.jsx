@@ -1,25 +1,26 @@
 import React from 'react';
-import { signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { getAuth } from "firebase/auth";
+import { useAuth } from '../../contexts/AuthContext';
+import Swal from 'sweetalert2';
 
 const LogoutButton = () => {
-  const auth = getAuth();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/login'); // Redirect to login page after logout
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Handle logout error (optional)
-    }
+  const handleLogout = () => {
+    logout();
+    Swal.fire({
+      icon: 'info',
+      title: 'Вы вышли из системы',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    navigate('/login');
   };
 
   return (
     <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-      Logout
+      Выход
     </button>
   );
 };

@@ -1,11 +1,54 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form"
 import CreatableSelect from "react-select/creatable";
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { apiClient } from '../../services/api/apiClient';
+import Swal from 'sweetalert2';
+import AuthDebugPanel from '../../components/debug/AuthDebugPanel';
 
 const CreateJobPage = () => {
     const { t } = useTranslation();
+    const { user, isAuthenticated, token } = useAuth();
+    const navigate = useNavigate();
     const [selectedOption, setSelectedOption] = useState(null);
+
+    // Проверяем, что пользователь авторизован и является работодателем
+    useEffect(() => {
+        if (!isAuthenticated) {
+            // Перенаправляем на страницу входа, если не авторизован
+            navigate('/login', { replace: true });
+        } else if (user?.role !== 'employer') {
+            // Если пользователь не работодатель, перенаправляем на главную
+            navigate('/', { replace: true });
+        }
+    }, [isAuthenticated, user, navigate]);
+
+    // Если пользователь не работодатель, показываем сообщение
+    if (!isAuthenticated || user?.role !== 'employer') {
+        return (
+            <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-12">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+                    <h2 className="text-2xl font-bold text-red-800 mb-4">Доступ запрещен</h2>
+                    <p className="text-red-700 mb-6">
+                        Только работодатели могут размещать вакансии.
+                        {!isAuthenticated && ' Пожалуйста, войдите в систему.'}
+                    </p>
+                    <div className="flex gap-4 justify-center">
+                        <Link to="/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                            На главную
+                        </Link>
+                        {!isAuthenticated && (
+                            <Link to="/login" className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                                Войти
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // Доступные города для выбора
     const cities = ["Elista", "Lagan", "Gorodovikovsk"];
@@ -16,30 +59,54 @@ const CreateJobPage = () => {
         formState: { errors },
       } = useForm()
     
-      const onSubmit = (data) => {
+      const onSubmit = async (data) => {
+        console.log('📝 CreateJobPage: Отправка формы...');
+        console.log('🔑 Token from context:', token ? `${token.substring(0, 20)}...` : 'ОТСУТСТВУЕТ');
+        console.log('👤 User from context:', user);
+        console.log('💾 Token from localStorage:', localStorage.getItem('auth_token') ? 'ЕСТЬ' : 'НЕТ');
+
+        if (!token || !user) {
+          console.error('❌ Токен или пользователь отсутствуют!');
+          await Swal.fire({
+            icon: 'error',
+            title: 'Ошибка авторизации',
+            text: 'Пожалуйста, войдите снова',
+          });
+          navigate('/login');
+          return;
+        }
+
+        // Добавляем навыки и email пользователя
         data.skills = selectedOption;
-        // console.log(data);
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        fetch(`${apiUrl}/post-job`, {
-          method: "POST",
-          headers: {'content-type': 'application/json'},
-          body: JSON.stringify(data)
-        })
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result);
-          if(result.message && result.job){
-            alert(t('createJob.successMessage'));
-            reset()
-          } else {
-            alert(t('createJob.errorMessage') + ": " + (result.message || "Unknown error"));
+
+        // Автоматически добавляем postedBy из данных пользователя
+        // Используем email если есть, иначе phone
+        if (!data.postedBy) {
+          data.postedBy = user.email || user.phone || `user_${user.id}`;
+        }
+
+        try {
+          const result = await apiClient.post('/post-job', data);
+
+          if (result.message && result.job) {
+            await Swal.fire({
+              icon: 'success',
+              title: 'Успешно!',
+              text: t('createJob.successMessage'),
+              timer: 2000,
+            });
+            reset();
+            setSelectedOption(null);
           }
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Error posting job:", error);
-          alert(t('createJob.errorMessage') + ". Please check console for details.");
-        });
-        };
+          await Swal.fire({
+            icon: 'error',
+            title: 'Ошибка',
+            text: error.message || t('createJob.errorMessage'),
+          });
+        }
+      };
 
         const options = [
           {value: "communication", label: "Коммуникабельность"},
@@ -86,6 +153,8 @@ const CreateJobPage = () => {
       ];
 
   return (
+    <>
+    <AuthDebugPanel />
     <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
 {/* Form */}
 <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
@@ -236,6 +305,7 @@ style={{ resize: 'none' }}/>
     </form>
 </div>
     </div>
+    </>
   )
 }
 

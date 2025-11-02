@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './common/db/database.module';
 import { JobsModule } from './domains/jobs/jobs.module';
 import { ApplicationsModule } from './domains/applications/applications.module';
+import { AuthModule } from './domains/auth/auth.module';
+import { UsersModule } from './domains/users/users.module';
 import { AppController } from './gateways/api/app.controller';
 
 @Module({
@@ -20,6 +22,12 @@ import { AppController } from './gateways/api/app.controller';
 
     // Модуль базы данных PostgreSQL
     DatabaseModule,
+
+    // Модуль аутентификации и авторизации
+    AuthModule,
+
+    // Модуль пользователей
+    UsersModule,
 
     // Модуль для работы с вакансиями
     JobsModule,

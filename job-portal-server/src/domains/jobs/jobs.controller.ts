@@ -14,10 +14,15 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @Controller()
 export class JobsController {
@@ -26,10 +31,13 @@ export class JobsController {
   /**
    * Создание новой вакансии
    * POST /post-job
+   * Требует авторизации и роли EMPLOYER
    * @param createJobDto - Данные для создания вакансии
    * @returns Созданная вакансия с сообщением об успехе
    */
   @Post('post-job')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.EMPLOYER)
   @HttpCode(HttpStatus.OK)
   async create(@Body() createJobDto: CreateJobDto) {
     const job = await this.jobsService.create(createJobDto);
@@ -74,11 +82,14 @@ export class JobsController {
   /**
    * Обновление вакансии
    * PATCH /update-job/:id
+   * Требует авторизации и роли EMPLOYER
    * @param id - ID вакансии для обновления
    * @param updateJobDto - Новые данные вакансии
    * @returns Обновленная вакансия с сообщением об успехе
    */
   @Patch('update-job/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.EMPLOYER)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateJobDto: UpdateJobDto,
@@ -93,10 +104,13 @@ export class JobsController {
   /**
    * Удаление вакансии
    * DELETE /job/:id
+   * Требует авторизации и роли EMPLOYER
    * @param id - ID вакансии для удаления
    * @returns Сообщение об успешном удалении
    */
   @Delete('job/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.EMPLOYER)
   async remove(@Param('id', ParseIntPipe) id: number) {
     const deletedJob = await this.jobsService.remove(id);
     return {

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import PageHeader from '../../components/layout/PageHeader'
-import { FiCalendar, FiClock, FiDollarSign, FiMapPin, FiPhone, FiMail, FiBriefcase } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiDollarSign, FiMapPin, FiPhone, FiMail, FiBriefcase, FiLock } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../contexts/AuthContext';
 
 const JobDetailsPage = () => {
     const { t, i18n } = useTranslation();
+    const { isAuthenticated } = useAuth();
     const {id} = useParams();
     const [job, setJob] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +99,18 @@ const JobDetailsPage = () => {
               <FiMapPin className="text-blue text-xl" />
               <div>
                 <p className="text-sm text-gray-600">{t('jobCard.location')}</p>
-                <p className="font-semibold">{job.jobLocation || 'N/A'}</p>
+                {isAuthenticated ? (
+                  <p className="font-semibold">
+                    {job.city ? t(`location.${job.city}`) : job.jobLocation || 'N/A'}
+                    {job.street && `, ${job.street}`}
+                    {job.apartment && `, ${job.apartment}`}
+                  </p>
+                ) : (
+                  <p className="font-semibold text-gray-400 flex items-center gap-2">
+                    <FiLock className="text-sm" />
+                    {job.city ? t(`location.${job.city}`) : 'N/A'}, *** (войдите для просмотра)
+                  </p>
+                )}
               </div>
             </div>
 
@@ -138,7 +151,14 @@ const JobDetailsPage = () => {
                 <FiPhone className="text-blue text-xl" />
                 <div>
                   <p className="text-sm text-gray-600">{t('createJob.phone')}</p>
-                  <p className="font-semibold">{job.phone}</p>
+                  {isAuthenticated ? (
+                    <p className="font-semibold">{job.phone}</p>
+                  ) : (
+                    <p className="font-semibold text-gray-400 flex items-center gap-2">
+                      <FiLock className="text-sm" />
+                      *** (войдите для просмотра)
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -169,12 +189,26 @@ const JobDetailsPage = () => {
           {/* Contact Section */}
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('createJob.postedBy')}</h3>
-            <div className="flex items-center gap-3">
-              <FiMail className="text-blue text-xl" />
-              <a href={`mailto:${job.postedBy}`} className="text-blue hover:underline">
-                {job.postedBy}
-              </a>
-            </div>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-3">
+                <FiMail className="text-blue text-xl" />
+                <a href={`mailto:${job.postedBy}`} className="text-blue hover:underline">
+                  {job.postedBy}
+                </a>
+              </div>
+            ) : (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start gap-3">
+                <FiLock className="text-yellow-600 text-xl mt-1" />
+                <div>
+                  <p className="text-gray-700 mb-2">
+                    Контактная информация доступна только авторизованным пользователям.
+                  </p>
+                  <Link to="/login" className="text-blue hover:underline font-semibold">
+                    Войдите, чтобы увидеть контакты работодателя
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Apply Button */}

@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import {FaBarsStaggered, FaXmark} from "react-icons/fa6";
 import { useTranslation } from 'react-i18next';
-
+import { useAuth } from '../../contexts/AuthContext';
 import LogoutButton from '../auth/LogoutButton';
 
 const Navbar = () => {
     const { t, i18n } = useTranslation();
+    const { user, isAuthenticated } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleMenuToggler = () => {
@@ -18,12 +19,24 @@ const Navbar = () => {
         localStorage.setItem('language', lng);
     }
 
-    const navItems = [
-        {path: "/", title: t('navbar.startSearch')},
-        {path: "/my-job", title: t('navbar.myJobs')},
-        {path: "/salary", title: t('navbar.salaryEstimate')},
-        {path: "/post-job", title: t('navbar.postJob')},
-    ]
+    // Навигация зависит от роли пользователя
+    const getNavItems = () => {
+        const baseItems = [
+            {path: "/", title: t('navbar.startSearch')},
+        ];
+
+        // Показываем "Разместить вакансию" только для работодателей
+        if (user?.role === 'employer') {
+            baseItems.push({path: "/post-job", title: t('navbar.postJob')});
+        }
+
+        // Добавляем "О проекте" для всех
+        baseItems.push({path: "/about", title: "О проекте"});
+
+        return baseItems;
+    };
+
+    const navItems = getNavItems();
   return (
     <header className='max-w-screen container mx-auto xl:px-24 px-4'>
         <nav className="flex justify-between items-center py-6">
@@ -53,19 +66,28 @@ const Navbar = () => {
                 }
             </ul>
 
-            {/* SIGNUP AND LOGIN BUTTON */}
-            <div className="text-base text-primary font-medium space-x-5 hidden lg:block">
-                <Link to = "/login" className='py-2 px-5 border rounded'>{t('navbar.login')}</Link>
-                <Link to = "/sign-up" className='py-2 px-5 border rounded bg-blue text-white'>{t('navbar.signup')}</Link>
+            {/* LOGIN BUTTON OR USER INFO */}
+            <div className="text-base text-primary font-medium space-x-5 hidden lg:flex items-center">
+                {isAuthenticated ? (
+                    <>
+                        <Link to="/profile" className="text-sm hover:text-blue-600 transition-colors">
+                            {user?.name} ({user?.role === 'employer' ? 'Работодатель' : 'Соискатель'})
+                        </Link>
+                        <LogoutButton />
+                    </>
+                ) : (
+                    <Link to="/login" className='py-2 px-5 border rounded bg-blue text-white'>
+                        {t('navbar.login')}
+                    </Link>
+                )}
                 {/* Language Switcher */}
-                {<button
+                <button
                     onClick={() => changeLanguage(i18n.language === 'klm' ? 'ru' : 'klm')}
                     className='py-2 px-5 border rounded bg-gray-100 hover:bg-gray-200 transition-colors'
                     title={i18n.language === 'en' ? 'Switch to Russian' : 'Переключить на калмыцкий'}
                 >
                     {i18n.language === 'klm' ? 'RU' : 'KLM'}
-                </button>}
-                
+                </button>
             </div>
 
             {/* MOBILE MENU */}
@@ -93,8 +115,14 @@ const Navbar = () => {
                     ))
                 }
 
-<li className="text-white py-1"><Link to = "/login">{t('navbar.login')}</Link></li>
-<li className="text-white py-1"><Link to = "/login">{t('navbar.logout')}</Link></li>
+{isAuthenticated ? (
+    <>
+        <li className="text-white py-1"><Link to="/profile">{user?.name}</Link></li>
+        <li className="text-white py-1"><LogoutButton /></li>
+    </>
+) : (
+    <li className="text-white py-1"><Link to="/login">{t('navbar.login')}</Link></li>
+)}
 <li className="text-white py-1">
     <button
         onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}
