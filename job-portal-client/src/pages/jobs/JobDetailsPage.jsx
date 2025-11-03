@@ -83,9 +83,6 @@ const JobDetailsPage = () => {
           {/* Header Section */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex gap-4">
-              {job.companyLogo && (
-                <img src={job.companyLogo} alt={job.companyName} className="w-20 h-20 object-contain" />
-              )}
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{job.jobTitle}</h1>
                 <h2 className="text-xl text-primary mb-3">{job.companyName}</h2>
@@ -177,11 +174,15 @@ const JobDetailsPage = () => {
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('createJob.requiredSkills')}</h3>
               <div className="flex flex-wrap gap-2">
-                {job.skills.map((skill, index) => (
-                  <span key={index} className="px-4 py-2 bg-blue text-white rounded-full text-sm">
-                    {typeof skill === 'string' ? skill : skill.value || skill.label}
-                  </span>
-                ))}
+                {job.skills.map((skill, index) => {
+                  const skillValue = typeof skill === 'string' ? skill : skill.value;
+                  const translatedSkill = t(`skillOptions.${skillValue}`, { defaultValue: skill.label || skillValue });
+                  return (
+                    <span key={index} className="px-4 py-2 bg-blue text-white rounded-full text-sm">
+                      {translatedSkill}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -209,16 +210,6 @@ const JobDetailsPage = () => {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Apply Button */}
-          <div className="flex justify-center mt-8">
-            <button
-              className="bg-blue hover:bg-blue-700 px-12 py-3 text-white font-semibold rounded-lg transition-colors duration-200"
-              onClick={handleApply}
-            >
-              {t('jobDetails.apply')}
-            </button>
           </div>
         </div>
     </div>

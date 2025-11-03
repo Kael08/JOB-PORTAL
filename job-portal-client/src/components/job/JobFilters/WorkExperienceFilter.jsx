@@ -22,8 +22,9 @@ const WorkExperienceFilter = ({handleChange}) => {
                 <span className="checkmark"></span>{t('sidebar.anyExperience')}
             </label>
 
+            <InputField handleChange={handleChange} value="Fresher/No Experience" title={t('sidebar.fresher')} name="test" />
             <InputField handleChange={handleChange} value="Internship" title={t('sidebar.internship')} name="test" />
-            <InputField handleChange={handleChange} value="Work Remotely" title={t('sidebar.remoteWork')} name="test" />
+            <InputField handleChange={handleChange} value="Remote Work" title={t('sidebar.experienced')} name="test" />
         </div>
     </div>
   )

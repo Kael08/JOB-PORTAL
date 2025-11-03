@@ -3,6 +3,7 @@ import App from "../App";
 import HomePage from "../pages/home/HomePage";
 import AboutPage from "../pages/about/AboutPage";
 import CreateJobPage from "../pages/jobs/CreateJobPage";
+import MyJobsPage from "../pages/jobs/MyJobsPage";
 import UpdateJobPage from "../pages/jobs/UpdateJobPage";
 import LoginPage from "../pages/auth/LoginPage";
 import JobDetailsPage from "../pages/jobs/JobDetailsPage";
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         {
           path: "/post-job",
           element: <CreateJobPage/>
+        },
+        {
+          path: "/my-job",
+          element: <MyJobsPage/>
         },
         {
           path: "/edit-job/:id",

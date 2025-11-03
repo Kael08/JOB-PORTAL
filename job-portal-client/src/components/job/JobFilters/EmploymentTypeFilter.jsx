@@ -22,7 +22,7 @@ const EmploymentTypeFilter = ({handleChange}) => {
                 <span className="checkmark"></span>{t('sidebar.allType')}
             </label>
 
-            <InputField handleChange={handleChange} value="Temporary" title={t('sidebar.contractual')} name="test" />
+            <InputField handleChange={handleChange} value="Temporary" title={t('sidebar.temporary')} name="test" />
             <InputField handleChange={handleChange} value="Part-Time" title={t('sidebar.partTime')} name="test" />
             <InputField handleChange={handleChange} value="Full-Time" title={t('sidebar.fullTime')} name="test" />
         </div>

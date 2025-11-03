@@ -227,7 +227,10 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
+              className="w-full text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: loading ? '#93c5fd' : '#2563eb' }}
+              onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#1d4ed8')}
+              onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#2563eb')}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -331,7 +334,10 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline disabled:cursor-not-allowed transition-colors"
+                style={{ backgroundColor: loading ? '#93c5fd' : '#2563eb' }}
+                onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#1d4ed8')}
+                onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = '#2563eb')}
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

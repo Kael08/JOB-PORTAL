@@ -74,28 +74,6 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Описание роли */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold mb-2 text-blue-900">
-                {user.role === 'employer' ? 'Возможности работодателя:' : 'Возможности соискателя:'}
-              </h3>
-              <ul className="list-disc list-inside text-blue-800 space-y-1">
-                {user.role === 'employer' ? (
-                  <>
-                    <li>Размещение вакансий</li>
-                    <li>Редактирование размещенных вакансий</li>
-                    <li>Просмотр контактной информации в вакансиях</li>
-                  </>
-                ) : (
-                  <>
-                    <li>Просмотр всех вакансий</li>
-                    <li>Просмотр контактной информации работодателей</li>
-                    <li>Фильтрация вакансий по параметрам</li>
-                  </>
-                )}
-              </ul>
-            </div>
-
             {/* Действия */}
             <div className="flex gap-3">
               <button

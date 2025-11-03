@@ -25,8 +25,9 @@ const Navbar = () => {
             {path: "/", title: t('navbar.startSearch')},
         ];
 
-        // Показываем "Разместить вакансию" только для работодателей
+        // Показываем кнопки только для работодателей
         if (user?.role === 'employer') {
+            baseItems.push({path: "/my-job", title: t('navbar.myJobs')});
             baseItems.push({path: "/post-job", title: t('navbar.postJob')});
         }
 

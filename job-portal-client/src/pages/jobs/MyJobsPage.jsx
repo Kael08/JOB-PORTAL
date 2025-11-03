@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../contexts/AuthContext';
+import { apiClient } from '../../services/api/apiClient';
+import Swal from 'sweetalert2';
 
 const MyJobsPage = () => {
     const { t } = useTranslation();
+    const { user, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [searchText, setSearchText] = useState("");
     const [isLoading, setIsLoading] = useState(true);
@@ -12,18 +17,44 @@ const MyJobsPage = () => {
 const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 4;
 
+    // Проверяем авторизацию и роль
     useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login', { replace: true });
+            return;
+        }
+        if (user?.role !== 'employer') {
+            navigate('/', { replace: true });
+            return;
+        }
+    }, [isAuthenticated, user, navigate]);
+
+    useEffect(() => {
+        if (!user?.email && !user?.phone) {
+          console.log('MyJobsPage: Нет email или phone у пользователя');
+          return;
+        }
+
         setIsLoading(true)
-        const email = "lakshay22dhoundiyal@gmail.com"; // TODO: Get from auth context
+        // Используем email или phone из контекста
+        const userIdentifier = user.email || user.phone;
+        console.log('MyJobsPage: Загрузка вакансий для пользователя:', userIdentifier);
+        console.log('MyJobsPage: Данные пользователя:', user);
+
         const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        fetch(`${apiUrl}/myJobs/${email}`).then(res => res.json()).then(data => {
+        const url = `${apiUrl}/myJobs/${userIdentifier}`;
+        console.log('MyJobsPage: Запрос к:', url);
+
+        fetch(url).then(res => res.json()).then(data => {
+          console.log('MyJobsPage: Получены вакансии:', data);
+          console.log('MyJobsPage: Количество вакансий:', data.length);
           setJobs(data);
           setIsLoading(false);
         }).catch(error => {
-          console.error("Error fetching jobs:", error);
+          console.error("MyJobsPage: Ошибка загрузки вакансий:", error);
           setIsLoading(false);
         });
-    }, [searchText]);
+    }, [searchText, user]);
 
     //Pagination
 
@@ -51,24 +82,28 @@ const itemsPerPage = 4;
       setIsLoading(false)
     }
 
-    const handleDelete = (id) => {
-      // console.log(id);
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-      fetch(`${apiUrl}/job/${id}`, {
-       method: "DELETE"
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        if(data.message === "Job deleted successfully"){
-          alert(t('myJobs.deleteSuccess'));
+    const handleDelete = async (id) => {
+      try {
+        const result = await apiClient.delete(`/job/${id}`);
+
+        if(result.message === "Вакансия успешно удалена"){
+          await Swal.fire({
+            icon: 'success',
+            title: t('myJobs.deleteSuccess'),
+            timer: 2000,
+            showConfirmButton: false
+          });
           // Refresh the jobs list
           window.location.reload();
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("Error deleting job:", error);
-        alert(t('myJobs.deleteError'));
-      });
+        await Swal.fire({
+          icon: 'error',
+          title: 'Ошибка',
+          text: error.message || t('myJobs.deleteError')
+        });
+      }
     };
 
     // console.log(searchText)
@@ -151,15 +186,15 @@ const itemsPerPage = 4;
                   {job.companyName}
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-              ${job.minPrice} - ${job.maxPrice}
+              {Math.round(job.minPrice).toLocaleString('ru-RU')} ₽ - {Math.round(job.maxPrice).toLocaleString('ru-RU')} ₽
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                   <button>
-                    <Link to={`/edit-job/${job?._id}`}>{t('myJobs.edit')}</Link>
+                    <Link to={`/edit-job/${job.id}`}>{t('myJobs.edit')}</Link>
                   </button>
                 </td>
                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                 <button onClick={() => handleDelete(job._id)} className="bg-red-700 py-2 px-6 text-white rounded-sm">
+                 <button onClick={() => handleDelete(job.id)} className="bg-red-700 py-2 px-6 text-white rounded-sm">
                   {t('myJobs.delete')}
                  </button>
                 </td>
@@ -198,9 +233,7 @@ const itemsPerPage = 4;
   <div className="container mx-auto px-4">
     <div className="flex flex-wrap items-center md:justify-between justify-center">
       <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-        <div className="text-sm text-blueGray-500 font-semibold py-1">
-          Copyright by &copy; <a href="https://lakshaydhoundiyalportfolio.netlify.app" className="text-blue hover:text-gray-800" target="_blank">Lakshay Dhoundiyal</a>. <a href="https://www.creative-tim.com" className="text-blueGray-500 hover:text-blueGray-800" target="_blank">All Rights Reserved.</a>
-        </div>
+      
       </div>
     </div>
   </div>

@@ -3,7 +3,6 @@ import JobSearchBar from "../../components/job/JobSearchBar"
 import JobCard from "../../components/job/JobCard";
 import Jobs from "./components/Jobs";
 import JobFilters from "../../components/job/JobFilters";
-import Newsletter from "./components/Newsletter";
 import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
@@ -91,10 +90,18 @@ const prevPage = () => {
           return parseInt(maxPrice) <= selectedNum;
         }
 
+        // Check if selected is a date (YYYY-MM-DD format)
+        if (/^\d{4}-\d{2}-\d{2}$/.test(selected)) {
+          // Convert both dates to Date objects for comparison
+          const jobDate = new Date(postingDate);
+          const filterDate = new Date(selected);
+          // Return jobs posted on or after the filter date
+          return jobDate >= filterDate;
+        }
+
         // Otherwise, filter by other categories
         return (
           city.toLowerCase() === selected.toLowerCase() ||
-          postingDate >= selected ||
           salaryType.toLowerCase() === selected.toLowerCase() ||
           experienceLevel.toLowerCase() === selected.toLowerCase() ||
           employmentType.toLowerCase() === selected.toLowerCase()
@@ -117,14 +124,14 @@ const prevPage = () => {
       <JobSearchBar query={query} handleInputChange={handleInputChange} />
     
     {/* Main Content */}
-    <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
+    <div className="bg-[#FAFAFA] md:grid grid-cols-3 gap-8 lg:px-24 px-4 py-12">
       {/* Left Side */}
      <div className="bg-white p-4 rounded">
       <JobFilters handleChange={handleChange} handleClick={handleClick}/>
      </div>
 
      {/* Jobs Cards */}
-     <div className="col-span-2 bg-white p-4 rounded-sm"> 
+     <div className="col-span-2 bg-white p-4 rounded-sm">
 
       {
         isLoading ? (<p className="font-medium">{t('common.loading')}</p>) : result.length > 0 ? (<Jobs result={result}/>) : <>
@@ -148,11 +155,8 @@ const prevPage = () => {
           </div>
         ) : ""
       }
-    
-    </div>
 
-{/* Right Side */}
-     <div className="bg-white p-4 rounded"><Newsletter/></div>
+    </div>
     </div>
     
     </div>

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useForm } from "react-hook-form"
 import CreatableSelect from "react-select/creatable";
 import { useTranslation } from 'react-i18next';
+import { apiClient } from '../../services/api/apiClient';
+import Swal from 'sweetalert2';
 
 const UpdateJobPage = () => {
     const { t } = useTranslation();
@@ -21,75 +23,48 @@ const UpdateJobPage = () => {
         formState: { errors },
       } = useForm()
     
-      const onSubmit = (data) => {
+      const onSubmit = async (data) => {
         data.skills = selectedOption;
-        // console.log(data);
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        fetch(`${apiUrl}/update-job/${id}`, {
-          method: "PATCH",
-          headers: {'content-type': 'application/json'},
-          body: JSON.stringify(data)
-        })
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result);
-          if(result.message === "Job updated successfully"){
-            alert(t('createJob.updateSuccessMessage'));
-            reset()
-            window.location.href = '/my-job';
-          } else {
-            alert(t('createJob.updateErrorMessage') + ": " + (result.message || "Unknown error"));
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating job:", error);
-          alert(t('createJob.updateErrorMessage') + ". Please check console for details.");
-        });
-        };
 
-        const options = [
-          {value: "communication", label: "Коммуникабельность"},
-          {value: "teamwork", label: "Работа в команде"},
-          {value: "initiative", label: "Инициативность"},
-          {value: "responsibility", label: "Ответственность"},
-          {value: "creativity", label: "Креативность"},
-          {value: "problem_solving", label: "Решение проблем"},
-          {value: "time_management", label: "Тайм-менеджмент"},
-          {value: "adaptability", label: "Адаптивность"},
-          {value: "leadership", label: "Лидерство"},
-          {value: "critical_thinking", label: "Критическое мышление"},
-          {value: "customer_service", label: "Клиентоориентированность"},
-          {value: "negotiation", label: "Навыки переговоров"},
-          {value: "presentation", label: "Презентационные навыки"},
-          {value: "analytical_thinking", label: "Аналитическое мышление"},
-          {value: "organization", label: "Организационные навыки"},
-          {value: "multitasking", label: "Мультизадачность"},
-          {value: "conflict_resolution", label: "Разрешение конфликтов"},
-          {value: "decision_making", label: "Принятие решений"},
-          {value: "strategic_planning", label: "Стратегическое планирование"},
-          {value: "project_management", label: "Управление проектами"},
-          {value: "sales_skills", label: "Навыки продаж"},
-          {value: "marketing", label: "Маркетинг"},
-          {value: "financial_literacy", label: "Финансовая грамотность"},
-          {value: "foreign_language", label: "Знание иностранных языков"},
-          {value: "emotional_intelligence", label: "Эмоциональный интеллект"},
-          {value: "stress_management", label: "Стрессоустойчивость"},
-          {value: "learning_ability", label: "Обучаемость"},
-          {value: "mentoring", label: "Наставничество"},
-          {value: "public_speaking", label: "Публичные выступления"},
-          {value: "networking", label: "Нетворкинг"},
-          {value: "attention_to_detail", label: "Внимание к деталям"},
-          {value: "persuasion", label: "Убеждение"},
-          {value: "research", label: "Исследовательские навыки"},
-          {value: "writing_skills", label: "Письменные навыки"},
-          {value: "active_listening", label: "Активное слушание"},
-          {value: "delegation", label: "Делегирование"},
-          {value: "coaching", label: "Коучинг"},
-          {value: "change_management", label: "Управление изменениями"},
-          {value: "quality_control", label: "Контроль качества"},
-          {value: "business_etiquette", label: "Деловой этикет"},
-          {value: "other", label: "Другое"}
-      ];
+        try {
+          const result = await apiClient.patch(`/update-job/${id}`, data);
+          console.log(result);
+
+          if(result.message === "Вакансия успешно обновлена"){
+            await Swal.fire({
+              icon: 'success',
+              title: t('createJob.updateSuccessMessage'),
+              timer: 2000,
+              showConfirmButton: false
+            });
+            reset();
+            window.location.href = '/my-job';
+          }
+        } catch (error) {
+          console.error("Error updating job:", error);
+          await Swal.fire({
+            icon: 'error',
+            title: 'Ошибка',
+            text: error.message || t('createJob.updateErrorMessage')
+          });
+        }
+      };
+
+        const skillKeys = [
+          "communication", "teamwork", "initiative", "responsibility", "creativity",
+          "problem_solving", "time_management", "adaptability", "leadership", "critical_thinking",
+          "customer_service", "negotiation", "presentation", "analytical_thinking", "organization",
+          "multitasking", "conflict_resolution", "decision_making", "strategic_planning", "project_management",
+          "sales_skills", "marketing", "financial_literacy", "foreign_language", "emotional_intelligence",
+          "stress_management", "learning_ability", "mentoring", "public_speaking", "networking",
+          "attention_to_detail", "persuasion", "research", "writing_skills", "active_listening",
+          "delegation", "coaching", "change_management", "quality_control", "business_etiquette", "other"
+        ];
+
+        const options = skillKeys.map(key => ({
+          value: key,
+          label: t(`skillOptions.${key}`)
+        }));
             
   return (
     <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
@@ -197,11 +172,6 @@ const UpdateJobPage = () => {
 
     {/* Sixth Row */}
     <div className="create-job-flex">
-        <div className="lg:w-1/2 w-full">
-            <label className='block mb-2 text-lg'>{t('createJob.companyLogo')}</label>
-            <input type="url" placeholder={t('createJob.placeholders.companyLogo')} defaultValue={companyLogo}
-            {...register("companyLogo")} className='create-job-input'/>
-            </div>
             <div className="lg:w-1/2 w-full">
             <label className='block mb-2 text-lg'>{t('createJob.employmentType')}</label>
             <select {...register("employmentType", { required: true })} className='create-job-input'>
@@ -239,7 +209,7 @@ const UpdateJobPage = () => {
     </div>
 
 
-          <input type="submit" value={t('createJob.submit')} className='block bg-blue text-white font-semibold px-8 py-2 rounded-sm cursor-pointer'/>
+          <input type="submit" value="Сохранить изменения" className='block bg-blue text-white font-semibold px-8 py-2 rounded-sm cursor-pointer'/>
         </form>
     </div>
         </div>

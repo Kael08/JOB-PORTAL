@@ -25,10 +25,9 @@ const formatDate = (dateString) => {
 };
 
   return (
-   
+
   <section className="card">
     <Link to={`/job/${_id}`} className='flex gap-4 flex-col sm:flex-row items-start'>
-    <img src={companyLogo} alt="" className="w-16 h-16 object-contain flex-shrink-0" />
     <div className="">
       <h4 className="text-primary mb-1">{companyName}</h4>
       <h3 className="text-lg font-semibold mb-2">{jobTitle}</h3>
