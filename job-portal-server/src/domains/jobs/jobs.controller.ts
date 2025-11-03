@@ -69,14 +69,14 @@ export class JobsController {
   }
 
   /**
-   * Получение вакансий конкретного пользователя по email
-   * GET /myJobs/:email
-   * @param email - Email пользователя
+   * Получение вакансий конкретного пользователя по email или телефону
+   * GET /myJobs/:identifier
+   * @param identifier - Email или телефон пользователя
    * @returns Массив вакансий пользователя
    */
-  @Get('myJobs/:email')
-  async findByEmail(@Param('email') email: string) {
-    return this.jobsService.findByEmail(email);
+  @Get('myJobs/:identifier')
+  async findByIdentifier(@Param('identifier') identifier: string) {
+    return this.jobsService.findByIdentifier(identifier);
   }
 
   /**

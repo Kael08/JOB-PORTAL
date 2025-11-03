@@ -40,25 +40,36 @@ export class SmsService {
       return true;
     }
 
-    try {
-      const response = await axios.get(this.apiUrl, {
-        params: {
-          api_id: this.apiKey,
-          to: phone,
-          msg: message,
-          json: 1, // Получить ответ в формате JSON
-        },
-      });
+    this.logger.log(`Отправка SMS на ${phone} с API ключом: ${this.apiKey.substring(0, 10)}...`);
 
-      if (response.data.status === 'OK') {
-        this.logger.log(`SMS успешно отправлено на ${phone}`);
+    try {
+      const params = {
+        api_id: this.apiKey,
+        to: phone,
+        msg: message,
+        json: 1,
+      };
+
+      this.logger.debug(`Параметры запроса: ${JSON.stringify(params)}`);
+
+      const response = await axios.get(this.apiUrl, { params });
+
+      this.logger.log(`Ответ от SMS.ru: ${JSON.stringify(response.data)}`);
+
+      // SMS.ru возвращает status_code в ответе
+      if (response.data.status === 'OK' || response.data.status_code === 100) {
+        this.logger.log(`✅ SMS успешно отправлено на ${phone}`);
         return true;
       } else {
-        this.logger.error(`Ошибка отправки SMS: ${JSON.stringify(response.data)}`);
+        this.logger.error(`❌ Ошибка отправки SMS: ${JSON.stringify(response.data)}`);
+        this.logger.error(`Код ошибки: ${response.data.status_code}, текст: ${response.data.status_text}`);
         return false;
       }
     } catch (error) {
-      this.logger.error(`Ошибка при отправке SMS: ${error.message}`);
+      this.logger.error(`❌ Ошибка при отправке SMS: ${error.message}`);
+      if (error.response) {
+        this.logger.error(`Ответ сервера: ${JSON.stringify(error.response.data)}`);
+      }
       throw new Error('Не удалось отправить SMS');
     }
   }

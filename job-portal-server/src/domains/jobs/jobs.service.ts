@@ -97,6 +97,18 @@ export class JobsService {
   }
 
   /**
+   * Получение всех вакансий конкретного пользователя по email или телефону
+   * Ищет совпадение в полях posted_by ИЛИ phone
+   * @param identifier - Email или телефон пользователя
+   * @returns Массив вакансий пользователя
+   */
+  async findByIdentifier(identifier: string): Promise<Job[]> {
+    const query = 'SELECT * FROM jobs WHERE posted_by = $1 OR phone = $1 ORDER BY created_at DESC';
+    const result = await this.pool.query(query, [identifier]);
+    return result.rows;
+  }
+
+  /**
    * Обновление вакансии
    * @param id - ID вакансии для обновления
    * @param updateJobDto - Новые данные вакансии
