@@ -11,17 +11,21 @@ const UpdateJobPage = () => {
     const { t } = useTranslation();
     const {id} = useParams();
     // console.log(id)
-    const {_id, jobTitle, companyName, minPrice, maxPrice, salaryType, city, street, apartment, postingDate,
+    const {_id, jobTitle, companyName, salaryType, city, street, apartment, postingDate,
         experienceLevel, companyLogo, employmentType, description, postedBy, phone, skills} = useLoaderData();
         const [selectedOption, setSelectedOption] = useState(null);
 
     // Доступные города для выбора
     const cities = ["Elista", "Lagan", "Gorodovikovsk"];
     const {
-        register,
-        handleSubmit,reset,
-        formState: { errors },
-      } = useForm()
+      register,
+      handleSubmit,
+      reset,
+      watch,
+      formState: { errors },
+    } = useForm();
+
+    const minPrice = watch("minPrice");
     
       const onSubmit = async (data) => {
         data.skills = selectedOption;
@@ -88,17 +92,35 @@ const UpdateJobPage = () => {
 
         {/* 2nd Row */}
         <div className="create-job-flex">
-            <div className="lg:w-1/2 w-full">
+          <div className="lg:w-1/2 w-full">
             <label className='block mb-2 text-lg'>{t('createJob.minSalary')}</label>
             <input type="text" placeholder={t('createJob.placeholders.minSalary')}
-            {...register("minPrice")} className='create-job-input' defaultValue={minPrice}/>
+            {...register("minPrice", {
+              required: t('validation.required'),
+              valueAsNumber: true,
+              min: { value: 0, message: t('validation.nonNegative')}
+            })} 
+            className='create-job-input'/>
+            {errors.minPrice && (
+              <p className="form-error">{errors.minPrice.message}</p>
+            )}
             </div>
             <div className="lg:w-1/2 w-full">
             <label className='block mb-2 text-lg'>{t('createJob.maxSalary')}</label>
             <input type="text" placeholder={t('createJob.placeholders.maxSalary')}
-            {...register("maxPrice", { required: true })} className='create-job-input' defaultValue={maxPrice}/>
-            </div>
-        </div>
+            {...register("maxPrice",{
+              required: t('validation.required'),
+              valueAsNumber: true,
+              min: { value: 0, message: t('validation.nonNegative')},
+              validate: value =>
+                Number(value) > Number(minPrice) || t('validation.maxGreaterMin')
+            })} 
+            className='create-job-input'/>
+            {errors.maxPrice && (
+              <p className="form-error">{errors.maxPrice.message}</p>
+            )}
+          </div>
+      </div>
     
         {/* Third Row */}
 
@@ -109,7 +131,6 @@ const UpdateJobPage = () => {
             <option value={salaryType}>{salaryType}</option>
             <option value="Hourly">{t('createJob.hourly')}</option>
             <option value="Monthly">{t('createJob.monthly')}</option>
-            <option value="Yearly">{t('createJob.yearly')}</option>
           </select>
             </div>
             <div className="lg:w-1/2 w-full">
@@ -125,17 +146,24 @@ const UpdateJobPage = () => {
 
         {/* Address Row - Street and Apartment */}
         <div className="create-job-flex">
-            <div className="lg:w-1/2 w-full">
-            <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
-            <input type="text" placeholder={t('createJob.placeholders.street')} defaultValue={street}
-            {...register("street", { required: true })} className='create-job-input'/>
-            </div>
-            <div className="lg:w-1/2 w-full">
-            <label className='block mb-2 text-lg'>{t('createJob.apartment')}</label>
-            <input type="text" placeholder={t('createJob.placeholders.apartment')} defaultValue={apartment}
-            {...register("apartment", { required: true })} className='create-job-input'/>
-            </div>
-        </div>
+          <div className="lg:w-1/2 w-full">
+          <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
+          <input type="text" placeholder={t('createJob.placeholders.street')}
+          {...register("street", { required: true })} className='create-job-input'/>
+          </div>
+          <div className="lg:w-1/2 w-full">
+          <label className='block mb-2 text-lg'>{t('createJob.apartment')}</label>
+          <input type="number" placeholder={t('createJob.placeholders.apartment')}
+          {...register("apartment",{
+              required: t('validation.required'),
+              valueAsNumber: true,
+              min: { value: 0, message: t('validation.nonNegative')}
+          })} className='create-job-input'/>
+          {errors.apartment && (
+            <p className="form-error">{errors.apartment.message}</p>
+          )}
+          </div>
+      </div>
 
         {/* Fourth Row */}
 

@@ -15,6 +15,8 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Request,
+  UnauthorizedException
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -39,12 +41,31 @@ export class JobsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EMPLOYER)
   @HttpCode(HttpStatus.OK)
-  async create(@Body() createJobDto: CreateJobDto) {
-    const job = await this.jobsService.create(createJobDto);
+  async create(@Body() createJobDto: CreateJobDto, @Request() req) {
+    // Получаем userId из JWT токена (req.user устанавливается JwtAuthGuard)
+    const userId = req.user?.id;
+    const job = await this.jobsService.create(createJobDto, userId);
+    
     return {
       message: 'Вакансия успешно опубликована',
       job,
     };
+  }
+
+  /**
+   * Получение вакансий текущего авторизованного пользователя
+   * GET /myJobs
+   * Требует авторизации
+   * @returns Массив вакансий пользователя
+   */
+  @Get('myJobs')
+  @UseGuards(JwtAuthGuard)
+  async findMyJobs(@Request() req) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
+    return this.jobsService.findByUserId(userId);
   }
 
   /**

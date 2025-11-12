@@ -8,7 +8,7 @@ import { authApi } from '../../services/api/authApi';
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login, user, logout } = useAuth();
+  const { login, user, logout, isAuthenticated} = useAuth();
 
   const [step, setStep] = useState(1); // 1 - ввод телефона, 2 - ввод кода
   const [phone, setPhone] = useState('');
@@ -17,6 +17,13 @@ const LoginPage = () => {
   const [role, setRole] = useState('job_seeker');
   const [loading, setLoading] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false); // Флаг существующего пользователя
+
+  // Если пользователь уже авторизован, перенаправляем на главную
+  React.useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      navigate('/', { replace: true });
+    }
+  }, [loading, isAuthenticated, user, navigate]);
 
   // Функция нормализации номера телефона
   const normalizePhone = (phoneNumber) => {

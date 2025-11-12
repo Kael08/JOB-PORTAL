@@ -4,15 +4,17 @@ import { useAuth } from '../../contexts/AuthContext';
 import { FiUser, FiPhone, FiBriefcase, FiLogOut } from 'react-icons/fi';
 
 const ProfilePage = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
   // Перенаправляем на логин, если пользователь не авторизован
   React.useEffect(() => {
+    if(loading) return;
+
     if (!isAuthenticated) {
       navigate('/login', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, loading]);
 
   const handleLogout = () => {
     logout();

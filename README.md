@@ -5,7 +5,7 @@
 ### 1. Запуск Backend
 
 ```bash
-cd job-portal-server
+cd server
 npm run start:dev
 ```
 
@@ -16,7 +16,7 @@ Backend запустится на `http://localhost:5000`
 **Откройте новый терминал:**
 
 ```bash
-cd job-portal-client
+cd client
 npm run dev
 ```
 

@@ -17,11 +17,46 @@ export class JobsService {
   ) {}
 
   /**
+   * Преобразует дату из БД в строку формата YYYY-MM-DD используя локальное время
+   * @param dbDate - Дата из БД (может быть Date объект или строка)
+   * @returns Строка в формате YYYY-MM-DD
+   */
+  private formatDateToString(dbDate: any): string {
+    if (!dbDate) return null;
+    
+    if (typeof dbDate === 'string') {
+      // Если это строка, берем только дату (до T)
+      return dbDate.split('T')[0];
+    }
+    
+    // Если это Date объект, используем локальное время
+    const date = new Date(dbDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Преобразует массив вакансий, форматируя даты
+   * @param jobs - Массив вакансий из БД
+   * @returns Массив вакансий с отформатированными датами
+   */
+  private formatJobsDates(jobs: any[]): any[] {
+    return jobs.map(job => {
+      if (job.posting_date) {
+        job.posting_date = this.formatDateToString(job.posting_date);
+      }
+      return job;
+    });
+  }
+
+  /**
    * Создание новой вакансии
    * @param createJobDto - Данные для создания вакансии
    * @returns Созданная вакансия
    */
-  async create(createJobDto: CreateJobDto): Promise<Job> {
+  async create(createJobDto: CreateJobDto, userId?: number): Promise<Job> {
     // Преобразуем навыки из формата react-select в массив строк
     const skillsArray = this.normalizeSkills(createJobDto.skills);
 
@@ -29,9 +64,9 @@ export class JobsService {
       INSERT INTO jobs (
         job_title, company_name, company_logo, min_price, max_price,
         salary_type, city, street, apartment, posting_date, experience_level,
-        employment_type, description, posted_by, skills, phone
+        employment_type, description, posted_by, skills, phone, user_id
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::DATE, $11, $12, $13, $14, $15, $16, $17)
       RETURNING *
     `;
 
@@ -52,10 +87,28 @@ export class JobsService {
       createJobDto.postedBy,
       skillsArray,
       createJobDto.phone,
+      userId,
     ];
 
     const result = await this.pool.query(query, values);
+    
+    // Преобразуем дату обратно в строку формата YYYY-MM-DD для корректного отображения
+    if (result.rows[0]?.posting_date) {
+      result.rows[0].posting_date = this.formatDateToString(result.rows[0].posting_date);
+    }
+    
     return result.rows[0];
+  }
+
+   /**
+   * Получение всех вакансий конкретного пользователя по user_id
+   * @param userId - ID пользователя
+   * @returns Массив вакансий пользователя
+   */
+   async findByUserId(userId: number): Promise<Job[]> {
+    const query = 'SELECT * FROM jobs WHERE user_id = $1 ORDER BY created_at DESC';
+    const result = await this.pool.query(query, [userId]);
+    return this.formatJobsDates(result.rows);
   }
 
   /**
@@ -65,7 +118,7 @@ export class JobsService {
   async findAll(): Promise<Job[]> {
     const query = 'SELECT * FROM jobs ORDER BY created_at DESC';
     const result = await this.pool.query(query);
-    return result.rows;
+    return this.formatJobsDates(result.rows);
   }
 
   /**
@@ -82,7 +135,11 @@ export class JobsService {
       throw new NotFoundException(`Вакансия с ID ${id} не найдена`);
     }
 
-    return result.rows[0];
+    const job = result.rows[0];
+    if (job.posting_date) {
+      job.posting_date = this.formatDateToString(job.posting_date);
+    }
+    return job;
   }
 
   /**
@@ -93,7 +150,7 @@ export class JobsService {
   async findByEmail(email: string): Promise<Job[]> {
     const query = 'SELECT * FROM jobs WHERE posted_by = $1 ORDER BY created_at DESC';
     const result = await this.pool.query(query, [email]);
-    return result.rows;
+    return this.formatJobsDates(result.rows);
   }
 
   /**
@@ -105,7 +162,7 @@ export class JobsService {
   async findByIdentifier(identifier: string): Promise<Job[]> {
     const query = 'SELECT * FROM jobs WHERE posted_by = $1 OR phone = $1 ORDER BY created_at DESC';
     const result = await this.pool.query(query, [identifier]);
-    return result.rows;
+    return this.formatJobsDates(result.rows);
   }
 
   /**
@@ -132,7 +189,7 @@ export class JobsService {
           city = COALESCE($7, city),
           street = COALESCE($8, street),
           apartment = COALESCE($9, apartment),
-          posting_date = COALESCE($10, posting_date),
+          posting_date = COALESCE($10::DATE, posting_date),
           experience_level = COALESCE($11, experience_level),
           employment_type = COALESCE($12, employment_type),
           description = COALESCE($13, description),
@@ -169,7 +226,11 @@ export class JobsService {
       throw new NotFoundException(`Вакансия с ID ${id} не найдена`);
     }
 
-    return result.rows[0];
+    const job = result.rows[0];
+    if (job.posting_date) {
+      job.posting_date = this.formatDateToString(job.posting_date);
+    }
+    return job;
   }
 
   /**

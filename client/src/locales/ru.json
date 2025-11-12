@@ -11,7 +11,7 @@
   "home": {
     "title": "Найдите",
     "subtitle": "новую работу",
-    "description": "Тысячи вакансий в сфере программного обеспечения, инженерии и технологий ждут вас.",
+    "description": "Тысячи вакансий в Калмыкии ждут вас!",
     "searchPlaceholder": "Должность, которую вы ищете...",
     "searchButton": "Поиск"
   },
@@ -65,6 +65,13 @@
     "monthly": "Месячная",
     "yearly": "Годовая",
     "requiredSkills": "Требуемые навыки",
+    "successMessage": "Вакансия успешно размещена",
+    "updateSuccessMessage": "Вакансия успешно обновлена",
+    "errorMessage": "Не удалось разместить вакансию",
+    "updateErrorMessage": "Не удалось обновить вакансию",
+    "city": "Город",
+    "street": "Улица",
+    "apartment": "Номер апартамента",
     "placeholders": {
       "jobTitle": "Введите название вакансии",
       "companyName": "Укажите полное наименование компании работодателя",
@@ -91,14 +98,7 @@
       "fullTime": "Полная занятость",
       "partTime": "Частичная занятость",
       "temporary": "Временная"
-    },
-    "successMessage": "Вакансия успешно размещена",
-    "updateSuccessMessage": "Вакансия успешно обновлена",
-    "errorMessage": "Не удалось разместить вакансию",
-    "updateErrorMessage": "Не удалось обновить вакансию",
-    "city": "Город",
-    "street": "Улица",
-    "apartment": "Номер апартамента"
+    }
   },
   "myJobs": {
     "title": "МОИ ВАКАНСИИ",
@@ -212,7 +212,7 @@
     "vacancyCount_few": "{{count}} вакансии",
     "vacancyCount_many": "{{count}} вакансий",
     "vacancyCount_other": "{{count}} вакансий",
-    "noDataFound": "Данные не найдены!",
+    "noDataFound": "Вакансии не найдены!",
     "previous": "Назад",
     "next": "Вперёд"
   },
@@ -270,5 +270,10 @@
     "quality_control": "Контроль качества",
     "business_etiquette": "Деловой этикет",
     "other": "Другое"
+  },
+  "validation": {
+    "required": "Это поле является обязательным",
+    "nonNegative": "Значение должно быть положительным",
+    "maxGreaterMin": "Максимальное значение должно быть больше минимального"
   }
 }

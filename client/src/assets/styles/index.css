@@ -16,4 +16,8 @@
   .card {
     @apply bg-white border border-gold-200 hover:border-accent transition shadow-sm;
   }
+
+  .form-error {
+    @apply text-sm text-red-500 mt-1;
+  }
 }

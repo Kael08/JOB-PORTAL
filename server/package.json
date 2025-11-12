@@ -1,5 +1,5 @@
 {
-  "name": "job-portal-server-nestjs",
+  "name": "server-nestjs",
   "version": "2.0.0",
   "description": "Job Portal API построенный на NestJS и PostgreSQL",
   "main": "dist/main.js",

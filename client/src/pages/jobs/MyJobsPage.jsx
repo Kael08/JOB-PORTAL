@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 
 const MyJobsPage = () => {
     const { t } = useTranslation();
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, loading } = useAuth();
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [searchText, setSearchText] = useState("");
@@ -19,42 +19,43 @@ const itemsPerPage = 4;
 
     // Проверяем авторизацию и роль
     useEffect(() => {
+        if(loading) return;
+
         if (!isAuthenticated) {
-            navigate('/login', { replace: true });
+            navigate('/', { replace: true });
             return;
         }
         if (user?.role !== 'employer') {
             navigate('/', { replace: true });
             return;
         }
-    }, [isAuthenticated, user, navigate]);
+    }, [isAuthenticated, user, navigate, loading]);
 
     useEffect(() => {
-        if (!user?.email && !user?.phone) {
-          console.log('MyJobsPage: Нет email или phone у пользователя');
-          return;
-        }
+      // Ждем загрузки данных из localStorage
+      if (loading) return;
+      
+      if (!user?.id) {
+        console.log('MyJobsPage: Нет ID у пользователя');
+        return;
+      }
 
-        setIsLoading(true)
-        // Используем email или phone из контекста
-        const userIdentifier = user.email || user.phone;
-        console.log('MyJobsPage: Загрузка вакансий для пользователя:', userIdentifier);
-        console.log('MyJobsPage: Данные пользователя:', user);
+      setIsLoading(true);
+      console.log('MyJobsPage: Загрузка вакансий для userId:', user.id);
 
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-        const url = `${apiUrl}/myJobs/${userIdentifier}`;
-        console.log('MyJobsPage: Запрос к:', url);
-
-        fetch(url).then(res => res.json()).then(data => {
+      // apiClient уже добавляет базовый URL, поэтому передаем только путь
+      apiClient.get('/myJobs')
+        .then(data => {
           console.log('MyJobsPage: Получены вакансии:', data);
           console.log('MyJobsPage: Количество вакансий:', data.length);
           setJobs(data);
           setIsLoading(false);
-        }).catch(error => {
+        })
+        .catch(error => {
           console.error("MyJobsPage: Ошибка загрузки вакансий:", error);
           setIsLoading(false);
         });
-    }, [searchText, user]);
+  }, [loading, user]);
 
     //Pagination
 
@@ -170,39 +171,46 @@ const itemsPerPage = 4;
         </thead>
 
         {
-          isLoading ? (<div className="flex items-center justify-center h-20"><p className="">{t('common.loading')}</p></div>) : 
-          (<tbody>
-            {
-              currentJobs.map((job, index) => (
-  
-                <tr key={index}>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
-                  {index + 1}
-                </th>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                  {job.jobTitle}
+          isLoading ? (
+            <tbody>
+              <tr>
+                <td colSpan="6" className="px-6 py-4 text-center">
+                  <p className="">{t('common.loading')}</p>
                 </td>
-                <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {job.companyName}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-              {Math.round(job.minPrice).toLocaleString('ru-RU')} ₽ - {Math.round(job.maxPrice).toLocaleString('ru-RU')} ₽
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <button>
-                    <Link to={`/edit-job/${job.id}`}>{t('myJobs.edit')}</Link>
-                  </button>
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                 <button onClick={() => handleDelete(job.id)} className="bg-red-700 py-2 px-6 text-white rounded-sm">
-                  {t('myJobs.delete')}
-                 </button>
-                </td>
-              </tr>  ))
-            }
-        
-          </tbody>
-  )
+              </tr>
+            </tbody>
+          ) : (
+            <tbody>
+              {
+                currentJobs.map((job, index) => (
+                  <tr key={index}>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
+                      {index + 1}
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                      {job.jobTitle}
+                    </td>
+                    <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {job.companyName}
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {Math.round(job.minPrice).toLocaleString('ru-RU')} ₽ - {Math.round(job.maxPrice).toLocaleString('ru-RU')} ₽
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <button>
+                        <Link to={`/edit-job/${job.id}`}>{t('myJobs.edit')}</Link>
+                      </button>
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <button onClick={() => handleDelete(job.id)} className="bg-red-700 py-2 px-6 text-white rounded-sm">
+                        {t('myJobs.delete')}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          )
         }
 
       </table>
