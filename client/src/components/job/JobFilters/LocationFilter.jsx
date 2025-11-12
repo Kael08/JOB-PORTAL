@@ -7,24 +7,23 @@ const LocationFilter = ({handleChange}) => {
 
   return (
     <div>
-        <h4 className="text-lg font-medium mb-2">{t('sidebar.location')}</h4>
+        <h4 className="text-sm font-medium mb-1">{t('sidebar.location')}</h4>
 
-        <div className="">
+        <div className="space-y-0.5">
             <label className='sidebar-label-container'>
                 <input
                     type="radio"
-                    id="test"
-                    name="test"
-                    // placeholder="placeholder"
+                    id="location-all"
+                    name="location"
                     value=""
                     onChange={handleChange}
                 />
                 <span className="checkmark"></span>{t('sidebar.all')}
             </label>
 
-            <InputField handleChange={handleChange} value={t('location.Elista.en')} title={t('location.Elista')} name="test" />
-            <InputField handleChange={handleChange} value={t('location.Lagan.en')} title={t('location.Lagan')} name="test" />
-            <InputField handleChange={handleChange} value={t('location.Gorodovikovsk.en')} title={t('location.Gorodovikovsk')} name="test" />
+            <InputField handleChange={handleChange} value={t('location.Elista.en')} title={t('location.Elista')} name="location" />
+            <InputField handleChange={handleChange} value={t('location.Lagan.en')} title={t('location.Lagan')} name="location" />
+            <InputField handleChange={handleChange} value={t('location.Gorodovikovsk.en')} title={t('location.Gorodovikovsk')} name="location" />
         </div>
     </div>
   )

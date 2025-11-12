@@ -20,7 +20,13 @@
     "location": "Бәәрн",
     "posted": "Орулсн",
     "employment": "Күч-көлснә кев",
-    "details": "Нәрнәр"
+    "details": "Нәрнәр",
+    "postedToday": "Аҗл энә өдр бәәрсн",
+    "postedYesterday": "Аҗл үкл өдр бәәрсн",
+    "postedThisWeek": "Аҗл энә долан хонг бәәрсн",
+    "postedThisMonth": "Аҗл энә сар бәәрсн",
+    "postedThisYear": "Аҗл энә җил бәәрсн",
+    "postedLongAgo": "Аҗл улсн бәәрсн"
   },
   "sidebar": {
     "filters": "Шүүлтүр",
@@ -106,12 +112,16 @@
     "salary": "ҖАЛВ",
     "edit": "ЯСХ",
     "delete": "УГА КЕХ",
+    "visibility": "ҮЗЛҮЛҺН",
+    "hide": "Нуух",
+    "show": "Үзүлх",
     "previous": "Хәрү",
     "next": "Өмәрән",
     "search": "Хәәлт",
     "searchPlaceholder": "Аҗлын нерәр хәәлт",
     "deleteSuccess": "Аҗл бүтәмҗтә уга кесн бәәнә!",
-    "deleteError": "Аҗл хасхсн уга"
+    "deleteError": "Аҗл хасхсн уга",
+    "toggleError": "Аҗлын үзүлһн хасхсн уга"
   },
   "salary": {
     "title": "Җалвин үнллһн",
@@ -214,7 +224,7 @@
   },
   "skills": {
     "selectPlaceholder": "Суңһтн...",
-    "createLabel": "Үүсктн \"{inputValue}\""
+    "createLabel": "Үүсктн дамшлт"
   },
   "location":{
     "Elista":"Элст",

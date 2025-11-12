@@ -7,24 +7,23 @@ const WorkExperienceFilter = ({handleChange}) => {
 
   return (
     <div>
-        <h4 className="text-lg font-medium mb-2">{t('sidebar.experience')}</h4>
+        <h4 className="text-sm font-medium mb-1">{t('sidebar.experience')}</h4>
 
-        <div className="">
+        <div className="space-y-0.5">
             <label className='sidebar-label-container'>
                 <input
                     type="radio"
-                    id="test"
-                    name="test"
-                    // placeholder="placeholder"
+                    id="experience-all"
+                    name="experience"
                     value=""
                     onChange={handleChange}
                 />
                 <span className="checkmark"></span>{t('sidebar.anyExperience')}
             </label>
 
-            <InputField handleChange={handleChange} value="Fresher/No Experience" title={t('sidebar.fresher')} name="test" />
-            <InputField handleChange={handleChange} value="Internship" title={t('sidebar.internship')} name="test" />
-            <InputField handleChange={handleChange} value="Remote Work" title={t('sidebar.experienced')} name="test" />
+            <InputField handleChange={handleChange} value="Fresher/No Experience" title={t('sidebar.fresher')} name="experience" />
+            <InputField handleChange={handleChange} value="Internship" title={t('sidebar.internship')} name="experience" />
+            <InputField handleChange={handleChange} value="Remote Work" title={t('sidebar.experienced')} name="experience" />
         </div>
     </div>
   )

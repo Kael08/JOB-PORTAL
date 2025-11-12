@@ -3,7 +3,7 @@
  * Содержит бизнес-логику и взаимодействие с базой данных
  */
 
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Pool } from 'pg';
 import { DATABASE_POOL } from '../../common/db/database.module';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -64,9 +64,9 @@ export class JobsService {
       INSERT INTO jobs (
         job_title, company_name, company_logo, min_price, max_price,
         salary_type, city, street, apartment, posting_date, experience_level,
-        employment_type, description, posted_by, skills, phone, user_id
+        employment_type, description, posted_by, skills, phone, user_id, is_visible
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::DATE, $11, $12, $13, $14, $15, $16, $17)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::DATE, $11, $12, $13, $14, $15, $16, $17, $18)
       RETURNING *
     `;
 
@@ -88,6 +88,7 @@ export class JobsService {
       skillsArray,
       createJobDto.phone,
       userId,
+      true, // is_visible по умолчанию true
     ];
 
     const result = await this.pool.query(query, values);
@@ -108,15 +109,27 @@ export class JobsService {
    async findByUserId(userId: number): Promise<Job[]> {
     const query = 'SELECT * FROM jobs WHERE user_id = $1 ORDER BY created_at DESC';
     const result = await this.pool.query(query, [userId]);
-    return this.formatJobsDates(result.rows);
+    const jobs = this.formatJobsDates(result.rows);
+    // Убеждаемся, что is_visible присутствует в результате и правильно маппится
+    return jobs.map(job => {
+      // Если is_visible не определен или null, устанавливаем true по умолчанию
+      const isVisible = job.is_visible !== undefined && job.is_visible !== null ? job.is_visible : true;
+      // Явно добавляем поле is_visible в результат, чтобы оно точно было в JSON
+      return {
+        ...job,
+        is_visible: isVisible,
+        isVisible: isVisible // Также добавляем camelCase версию для совместимости
+      };
+    });
   }
 
   /**
    * Получение всех вакансий с сортировкой по дате создания
-   * @returns Массив всех вакансий
+   * Показывает только видимые вакансии (is_visible = true)
+   * @returns Массив всех видимых вакансий
    */
   async findAll(): Promise<Job[]> {
-    const query = 'SELECT * FROM jobs ORDER BY created_at DESC';
+    const query = 'SELECT * FROM jobs WHERE is_visible = true ORDER BY created_at DESC';
     const result = await this.pool.query(query);
     return this.formatJobsDates(result.rows);
   }
@@ -269,5 +282,48 @@ export class JobsService {
     return skills.map((skill) =>
       typeof skill === 'object' && skill !== null ? skill.value : skill as string,
     );
+  }
+
+  /**
+   * Переключение видимости вакансии (скрыть/показать)
+   * @param id - ID вакансии
+   * @param userId - ID пользователя (для проверки прав)
+   * @returns Обновленная вакансия
+   * @throws NotFoundException если вакансия не найдена
+   * @throws UnauthorizedException если пользователь не является владельцем вакансии
+   */
+  async toggleVisibility(id: number, userId: number): Promise<Job> {
+    // Сначала проверяем, что вакансия существует и принадлежит пользователю
+    const checkQuery = 'SELECT * FROM jobs WHERE id = $1';
+    const checkResult = await this.pool.query(checkQuery, [id]);
+
+    if (checkResult.rows.length === 0) {
+      throw new NotFoundException(`Вакансия с ID ${id} не найдена`);
+    }
+
+    const job = checkResult.rows[0];
+    if (job.user_id !== userId) {
+      throw new UnauthorizedException('Вы не можете изменять эту вакансию');
+    }
+
+    // Переключаем видимость
+    const newVisibility = !job.is_visible;
+    const updateQuery = 'UPDATE jobs SET is_visible = $1 WHERE id = $2 RETURNING *';
+    const result = await this.pool.query(updateQuery, [newVisibility, id]);
+
+    const updatedJob = result.rows[0];
+    if (updatedJob.posting_date) {
+      updatedJob.posting_date = this.formatDateToString(updatedJob.posting_date);
+    }
+    return updatedJob;
+  }
+
+  /**
+   * Скрытие всех вакансий пользователя
+   * @param userId - ID пользователя
+   */
+  async hideAllUserJobs(userId: number): Promise<void> {
+    const query = 'UPDATE jobs SET is_visible = false WHERE user_id = $1';
+    await this.pool.query(query, [userId]);
   }
 }

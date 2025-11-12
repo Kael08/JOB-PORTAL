@@ -116,6 +116,16 @@ export const AuthProvider = ({ children }) => {
     return user?.role === role;
   };
 
+  // Обновление данных пользователя
+  const updateUser = (newUser, newToken) => {
+    setUser(newUser);
+    if (newToken) {
+      setToken(newToken);
+      localStorage.setItem('auth_token', newToken);
+    }
+    localStorage.setItem('auth_user', JSON.stringify(newUser));
+  };
+
   const value = {
     user,
     token,
@@ -123,6 +133,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     hasRole,
+    updateUser,
     isAuthenticated: !!user && !!token,
   };
 

@@ -20,7 +20,13 @@
     "location": "Location",
     "posted": "Posted",
     "employment": "Employment Type",
-    "details": "Details"
+    "details": "Details",
+    "postedToday": "Job posted today",
+    "postedYesterday": "Job posted yesterday",
+    "postedThisWeek": "Job posted this week",
+    "postedThisMonth": "Job posted this month",
+    "postedThisYear": "Job posted this year",
+    "postedLongAgo": "Job posted long ago"
   },
   "sidebar": {
     "filters": "Filters",
@@ -110,12 +116,16 @@
     "salary": "SALARY",
     "edit": "EDIT",
     "delete": "DELETE",
+    "visibility": "VISIBILITY",
+    "hide": "Hide",
+    "show": "Show",
     "previous": "Previous",
     "next": "Next",
     "search": "Search",
     "searchPlaceholder": "Search for Job Profile",
     "deleteSuccess": "Job Deleted Successfully!",
-    "deleteError": "Failed to delete job"
+    "deleteError": "Failed to delete job",
+    "toggleError": "Failed to change job visibility"
   },
   "salary": {
     "title": "Estimate Salary",
@@ -216,7 +226,7 @@
   },
   "skills": {
     "selectPlaceholder": "Select...",
-    "createLabel": "Create \"{inputValue}\""
+    "createLabel": "Create skill"
   },
   "location": {
     "Elista": "Elista",

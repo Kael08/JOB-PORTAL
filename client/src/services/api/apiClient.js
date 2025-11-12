@@ -24,19 +24,13 @@ export const apiClient = {
   async post(endpoint, data) {
     const token = getToken();
 
-    console.log('🔐 API Client - Token:', token ? `${token.substring(0, 20)}...` : 'ОТСУТСТВУЕТ');
-
     const headers = {
       'Content-Type': 'application/json',
     };
 
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
-    } else {
-      console.error('❌ Токен не найден в localStorage!');
     }
-
-    console.log('📤 Отправка запроса:', `${API_URL}${endpoint}`);
 
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'POST',
@@ -44,11 +38,8 @@ export const apiClient = {
       body: JSON.stringify(data),
     });
 
-    console.log('📥 Статус ответа:', response.status);
-
     if (!response.ok) {
       const error = await response.json().catch(() => ({ message: 'Ошибка сервера' }));
-      console.error('❌ Ошибка ответа:', error);
       throw new Error(error.message || 'Ошибка запроса');
     }
 

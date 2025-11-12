@@ -10,12 +10,12 @@ const Sidebar = ({handleChange, handleClick}) => {
   const { t } = useTranslation();
 
   return (
-    <div className='space-y-5'>
-    <h3 className="text-lg font-bold mb-2">{t('sidebar.filters')}</h3>
+    <div className='space-y-3'>
+    <h3 className="text-base font-bold mb-1">{t('sidebar.filters')}</h3>
 
     <LocationFilter handleChange={handleChange}/>
     <SalaryFilter handleChange={handleChange} handleClick={handleClick}/>
-    <JobPostingData handleChange = {handleChange}/>
+    {/* {<JobPostingData handleChange = {handleChange}/>} */}
     <WorkExperienceFilter handleChange = {handleChange}/>
     <EmploymentTypeFilter handleChange = {handleChange}/>
 

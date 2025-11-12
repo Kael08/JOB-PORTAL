@@ -6,15 +6,18 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
+import { JobsService } from '../jobs/jobs.service';
 import { SmsService } from '../../common/services/sms.service';
 import { SendCodeDto } from './dto/send-code.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
+import { UserRole } from '../users/entities/user.entity';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private jobsService: JobsService,
     private smsService: SmsService,
     private jwtService: JwtService,
   ) {}
@@ -149,5 +152,48 @@ export class AuthService {
 
     const { verificationCode, verificationCodeExpires, ...userWithoutSensitiveData } = user;
     return userWithoutSensitiveData;
+  }
+
+  /**
+   * Смена роли пользователя
+   * @param userId - ID пользователя
+   * @param newRole - Новая роль
+   * @returns Обновленный пользователь и новый JWT токен
+   */
+  async changeRole(userId: number, newRole: UserRole): Promise<{
+    access_token: string;
+    user: Omit<User, 'verificationCode' | 'verificationCodeExpires'>;
+  }> {
+    // Получаем текущего пользователя
+    const currentUser = await this.usersService.findById(userId);
+    if (!currentUser) {
+      throw new UnauthorizedException('Пользователь не найден');
+    }
+
+    // Если меняем с работодателя на соискателя - скрываем все вакансии
+    if (currentUser.role === UserRole.EMPLOYER && newRole === UserRole.JOB_SEEKER) {
+      await this.jobsService.hideAllUserJobs(userId);
+    }
+
+    // Обновляем роль
+    const updatedUser = await this.usersService.changeRole(userId, newRole);
+
+    // Создаем новый JWT токен с обновленной ролью
+    const payload = {
+      sub: updatedUser.id,
+      phone: updatedUser.phone,
+      name: updatedUser.name,
+      role: updatedUser.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    // Удаляем чувствительные данные из ответа
+    const { verificationCode, verificationCodeExpires, ...userWithoutSensitiveData } = updatedUser;
+
+    return {
+      access_token: accessToken,
+      user: userWithoutSensitiveData,
+    };
   }
 }

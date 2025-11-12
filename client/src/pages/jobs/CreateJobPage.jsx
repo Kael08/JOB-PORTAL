@@ -357,7 +357,7 @@ const CreateJobPage = () => {
       isMulti
       className='create-job-input py-4'
       placeholder={t('skills.selectPlaceholder')}
-      formatCreateLabel={(inputValue) => t('skills.createLabel', { inputValue })}/>
+      formatCreateLabel={() => t('skills.createLabel')}/>
     </div>
     
 

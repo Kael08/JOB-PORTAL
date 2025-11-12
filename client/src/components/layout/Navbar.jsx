@@ -32,7 +32,7 @@ const Navbar = () => {
         }
 
         // Добавляем "О проекте" для всех
-        baseItems.push({path: "/about", title: "О проекте"});
+        //baseItems.push({path: "/about", title: "О проекте"});
 
         return baseItems;
     };
@@ -44,12 +44,12 @@ const Navbar = () => {
             <a href="/" className="flex items-center gap-2 text-2xl text-black">
                 <img
                     src="/icon.webp"
-                    alt="Kalmykia.Work"
+                    alt="rabota.elistory.ru"
                     width="29"
                     height="30"
                     className=""
                 />
-                <span className="">Kalmykia.Work</span>
+                <span className="">rabota.elistory.ru</span>
             </a>
             {/* {NAV ITEMS FOR LARGE DEVICES} */}
             <ul className="hidden md:flex gap-12">
@@ -85,7 +85,7 @@ const Navbar = () => {
                 <button
                     onClick={() => changeLanguage(i18n.language === 'klm' ? 'ru' : 'klm')}
                     className='py-2 px-5 border rounded bg-gray-100 hover:bg-gray-200 transition-colors'
-                    title={i18n.language === 'en' ? 'Switch to Russian' : 'Переключить на калмыцкий'}
+                    title={i18n.language === 'klm' ? 'Switch to Russian' : 'Переключить на калмыцкий'}
                 >
                     {i18n.language === 'klm' ? 'RU' : 'KLM'}
                 </button>
@@ -116,22 +116,22 @@ const Navbar = () => {
                     ))
                 }
 
-{isAuthenticated ? (
-    <>
-        <li className="text-white py-1"><Link to="/profile">{user?.name}</Link></li>
-        <li className="text-white py-1"><LogoutButton /></li>
-    </>
-) : (
-    <li className="text-white py-1"><Link to="/login">{t('navbar.login')}</Link></li>
-)}
-<li className="text-white py-1">
-    <button
-        onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}
-        className='py-2 px-5 border rounded bg-gray-100 text-black hover:bg-gray-200 transition-colors w-full'
-    >
-        {i18n.language === 'en' ? 'Русский (RU)' : 'English (EN)'}
-    </button>
-</li>
+            {isAuthenticated ? (
+                <>
+                    <li className="text-white py-1"><Link to="/profile">{user?.name}</Link></li>
+                    <li className="text-white py-1"><LogoutButton /></li>
+                </>
+            ) : (
+                <li className="text-white py-1"><Link to="/login">{t('navbar.login')}</Link></li>
+            )}
+            <li className="text-white py-1">
+                <button
+                    onClick={() => changeLanguage(i18n.language === 'klm' ? 'ru' : 'klm')}
+                    className='py-2 px-5 border rounded bg-gray-100 text-black hover:bg-gray-200 transition-colors w-full'
+                >
+                    {i18n.language === 'klm' ? 'RU' : 'KLM'}
+                </button>
+            </li>
             </ul>
         </div>
     </header>

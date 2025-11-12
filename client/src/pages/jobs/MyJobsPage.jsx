@@ -36,23 +36,18 @@ const itemsPerPage = 4;
       if (loading) return;
       
       if (!user?.id) {
-        console.log('MyJobsPage: Нет ID у пользователя');
         return;
       }
 
       setIsLoading(true);
-      console.log('MyJobsPage: Загрузка вакансий для userId:', user.id);
 
       // apiClient уже добавляет базовый URL, поэтому передаем только путь
       apiClient.get('/myJobs')
         .then(data => {
-          console.log('MyJobsPage: Получены вакансии:', data);
-          console.log('MyJobsPage: Количество вакансий:', data.length);
           setJobs(data);
           setIsLoading(false);
         })
         .catch(error => {
-          console.error("MyJobsPage: Ошибка загрузки вакансий:", error);
           setIsLoading(false);
         });
   }, [loading, user]);
@@ -83,14 +78,14 @@ const itemsPerPage = 4;
       setIsLoading(false)
     }
 
-    const handleDelete = async (id) => {
+    const handleToggleVisibility = async (id, currentVisibility) => {
       try {
-        const result = await apiClient.delete(`/job/${id}`);
+        const result = await apiClient.patch(`/job/${id}/toggle-visibility`);
 
-        if(result.message === "Вакансия успешно удалена"){
+        if(result.message){
           await Swal.fire({
             icon: 'success',
-            title: t('myJobs.deleteSuccess'),
+            title: result.message,
             timer: 2000,
             showConfirmButton: false
           });
@@ -98,11 +93,10 @@ const itemsPerPage = 4;
           window.location.reload();
         }
       } catch (error) {
-        console.error("Error deleting job:", error);
         await Swal.fire({
           icon: 'error',
           title: 'Ошибка',
-          text: error.message || t('myJobs.deleteError')
+          text: error.message || t('myJobs.toggleError')
         });
       }
     };
@@ -165,7 +159,7 @@ const itemsPerPage = 4;
                           {t('myJobs.edit')}
                         </th>
           <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          {t('myJobs.delete')}
+                          {t('myJobs.visibility')}
                         </th>
           </tr>
         </thead>
@@ -182,7 +176,12 @@ const itemsPerPage = 4;
           ) : (
             <tbody>
               {
-                currentJobs.map((job, index) => (
+                currentJobs.map((job, index) => {
+                  // Проверяем оба варианта: is_visible (snake_case) и isVisible (camelCase)
+                  const isVisibleValue = job.is_visible !== undefined ? job.is_visible : (job.isVisible !== undefined ? job.isVisible : true);
+                  const isVisible = isVisibleValue === true || isVisibleValue === 'true' || isVisibleValue === 1;
+                  
+                  return (
                   <tr key={index}>
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
                       {index + 1}
@@ -202,12 +201,21 @@ const itemsPerPage = 4;
                       </button>
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <button onClick={() => handleDelete(job.id)} className="bg-red-700 py-2 px-6 text-white rounded-sm">
-                        {t('myJobs.delete')}
-                      </button>
+                     <button
+                       onClick={() => handleToggleVisibility(job.id, isVisibleValue)}
+                       className={`py-2 px-6 text-white rounded-sm ${
+                         isVisible
+                           ? 'bg-orange-600 hover:bg-orange-700'
+                           : 'bg-green-600 hover:bg-green-700'
+                       }`}
+                     >
+                       {isVisible ? t('myJobs.hide') : t('myJobs.show')}
+                     </button>
+
                     </td>
                   </tr>
-                ))
+                  );
+                })
               }
             </tbody>
           )

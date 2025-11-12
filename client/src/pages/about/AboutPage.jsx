@@ -7,7 +7,7 @@ const AboutPage = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">О проекте Kalmykia.Work</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">О проекте rabota.elistory.ru</h1>
           <p className="text-xl text-gray-600">
             Платформа для поиска работы и подбора персонала в Республике Калмыкия
           </p>
@@ -17,7 +17,7 @@ const AboutPage = () => {
         <section className="mb-12 bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">О платформе</h2>
           <p className="text-gray-700 mb-4">
-            Kalmykia.Work - это современная онлайн-платформа, созданная для помощи жителям
+          rabota.elistory.ru - это современная онлайн-платформа, созданная для помощи жителям
             Республики Калмыкия в поиске работы и работодателям в подборе квалифицированного персонала.
             Наша миссия - сделать процесс трудоустройства максимально простым, быстрым и эффективным.
           </p>
@@ -57,7 +57,7 @@ const AboutPage = () => {
             <div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Пользовательское соглашение</h3>
               <p className="text-gray-700 mb-2">
-                Используя платформу Kalmykia.Work, вы соглашаетесь с условиями использования сервиса.
+                Используя платформу rabota.elistory.ru, вы соглашаетесь с условиями использования сервиса.
                 Мы обязуемся защищать ваши персональные данные и использовать их исключительно
                 в рамках функционирования платформы.
               </p>
@@ -112,7 +112,7 @@ const AboutPage = () => {
 
           <div className="space-y-4 text-gray-700">
             <p>
-              Мы выражаем искреннюю благодарность всем, кто внес вклад в развитие платформы Kalmykia.Work:
+              Мы выражаем искреннюю благодарность всем, кто внес вклад в развитие платформы rabota.elistory.ru:
             </p>
 
             <div>
@@ -152,8 +152,8 @@ const AboutPage = () => {
             пожалуйста, свяжитесь с нами:
           </p>
           <div className="space-y-2 text-gray-700">
-            <p><strong>Email:</strong> support@kalmykia.work (пример)</p>
-            <p><strong>Telegram:</strong> @kalmykiawork (пример)</p>
+            <p><strong>Email:</strong> @rabota.elistory.ru (пример)</p>
+            <p><strong>Telegram:</strong> @rabota.elistory.ru (пример)</p>
           </div>
         </section>
 

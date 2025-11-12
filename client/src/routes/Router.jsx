@@ -26,9 +26,15 @@ const router = createBrowserRouter([
         {
           path: "/edit-job/:id",
           element: <UpdateJobPage/>,
-          loader: ({params}) => {
+          loader: async ({params}) => {
             const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-            return fetch(`${apiUrl}/all-jobs/${params.id}`);
+            const response = await fetch(`${apiUrl}/all-jobs/${params.id}`);
+            if (!response.ok) {
+              throw new Response("Not Found", { status: 404 });
+            }
+            const data = await response.json();
+            // Обрабатываем ответ - может быть объект или массив
+            return Array.isArray(data) ? data[0] : data;
           }
         },
         {

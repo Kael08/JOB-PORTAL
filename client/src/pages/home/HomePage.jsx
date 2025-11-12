@@ -29,22 +29,20 @@ const HomePage = () => {
 
   const [query, setQuery] = useState("");
   const handleInputChange = (event) => {
-    setQuery(event.target.value)
+    setQuery(event.target.value);
+    setCurrentPage(1); // Сбрасываем на первую страницу при изменении поиска
   }
 
-  // FILTER JOBS BY TITLE
-  const filteredItems = jobs.filter((job) => job.jobTitle && job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1)
-  // console.log(filteredItems)
-
   // Radio Filtering
-
   const handleChange = (event) => {
-    setSelectedCategory(event.target.value)
+    setSelectedCategory(event.target.value);
+    setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
   }
 
   // Button based Filtering
   const handleClick = (event) => {
-    setSelectedCategory(event.target.value)
+    setSelectedCategory(event.target.value);
+    setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
   }
 
   //Calculate the index range
@@ -54,40 +52,34 @@ const HomePage = () => {
     return {startIndex, endIndex};
   }
 
-  // Function for the next page
-const nextPage = () => {
-  if (currentPage < Math.ceil(filteredItems.length / itemsPerPage)){
-    setCurrentPage(currentPage + 1);
-  }
-}
-
-// Function for the previous page
-
-const prevPage = () => {
-  if(currentPage > 1){
-    setCurrentPage(currentPage - 1)
-  }
-}
-
-
-  //Main Function
-  const filteredData = (jobs, selected, query) => {
+  // Функция для получения полного списка отфильтрованных вакансий (без пагинации)
+  const getAllFilteredJobs = (jobs, selected, query) => {
     let filteredJobs = jobs;
 
-    //Filtering Input Items
+    // Фильтрация по поисковому запросу (название вакансии)
     if(query){
-      filteredJobs = filteredItems;
+      filteredJobs = filteredJobs.filter((job) => 
+        job.jobTitle && job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
     }
 
-    //Category Filtering
-
+    // Фильтрация по категориям
     if(selected) {
       filteredJobs = filteredJobs.filter(({city, minPrice, maxPrice, experienceLevel, salaryType, employmentType, postingDate}) => {
         // Check if selected is a number (salary filter)
         const selectedNum = parseInt(selected);
         if (!isNaN(selectedNum)) {
-          // Filter by salary: show jobs where maxPrice is less than or equal to selected value
-          return parseInt(maxPrice) <= selectedNum;
+          // Фильтрация по зарплате
+          // Отрицательные значения означают "меньше" (<), положительные - "больше или равно" (>=)
+          if (selectedNum < 0) {
+            // Для отрицательных значений: maxPrice < |selectedNum|
+            // Например, -20000 означает maxPrice < 20000
+            return parseInt(maxPrice) < Math.abs(selectedNum);
+          } else {
+            // Для положительных значений: maxPrice >= selectedNum
+            // Например, 80000 означает maxPrice >= 80000
+            return parseInt(maxPrice) >= selectedNum;
+          }
         }
 
         // Check if selected is a date (YYYY-MM-DD format)
@@ -107,49 +99,94 @@ const prevPage = () => {
           employmentType.toLowerCase() === selected.toLowerCase()
         );
       });
-      console.log(filteredJobs);
     }
 
-    // Slice the data based on current page
-    const {startIndex, endIndex} = calculatePageRange();
-    filteredJobs = filteredJobs.slice(startIndex, endIndex)
-
-    return filteredJobs.map((data, i) => <JobCard key ={i} data={data}/>)
+    return filteredJobs;
   }
 
-  const result = filteredData(jobs, selectedCategory, query);
+  // Получаем полный список отфильтрованных вакансий
+  const allFilteredJobs = getAllFilteredJobs(jobs, selectedCategory, query);
+  
+  // Вычисляем количество страниц на основе отфильтрованных вакансий
+  const totalPages = Math.ceil(allFilteredJobs.length / itemsPerPage);
+
+  // Function for the next page
+  const nextPage = () => {
+    if (currentPage < totalPages){
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  // Function for the previous page
+  const prevPage = () => {
+    if(currentPage > 1){
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  // Функция для получения данных с пагинацией
+  const getPaginatedData = () => {
+    const {startIndex, endIndex} = calculatePageRange();
+    const paginatedJobs = allFilteredJobs.slice(startIndex, endIndex);
+    return paginatedJobs.map((data, i) => <JobCard key={i} data={data}/>);
+  }
+
+  const result = getPaginatedData();
+  
+  // Сбрасываем страницу на 1, если текущая страница больше доступных страниц
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [totalPages, currentPage]);
 
   return (
     <div>
       <JobSearchBar query={query} handleInputChange={handleInputChange} />
     
     {/* Main Content */}
-    <div className="bg-[#FAFAFA] md:grid grid-cols-3 gap-8 lg:px-24 px-4 py-12">
-      {/* Left Side */}
-     <div className="bg-white p-4 rounded">
+    <div className="bg-[#FAFAFA] flex flex-col md:flex-row gap-4 lg:px-24 px-4 py-12">
+      {/* Left Side - Фильтры с фиксированной шириной */}
+     <div className="bg-white p-4 rounded w-full md:w-64 flex-shrink-0">
       <JobFilters handleChange={handleChange} handleClick={handleClick}/>
      </div>
 
      {/* Jobs Cards */}
-     <div className="col-span-2 bg-white p-4 rounded-sm">
+     <div className="bg-white p-4 rounded-sm flex-1 min-w-0">
 
       {
-        isLoading ? (<p className="font-medium">{t('common.loading')}</p>) : result.length > 0 ? (<Jobs result={result}/>) : <>
-        <h3 className="text-lg font-bold mb-2">{t('jobs.vacancyCount', { count: result.length })}</h3>
-        <p className="">{t('jobs.noDataFound')}</p>
-        </>
+        isLoading ? (
+          <p className="font-medium">{t('common.loading')}</p>
+        ) : allFilteredJobs.length > 0 ? (
+          <Jobs result={result} totalCount={allFilteredJobs.length}/>
+        ) : (
+          <>
+            <h3 className="text-lg font-bold mb-2">{t('jobs.vacancyCount', { count: 0 })}</h3>
+            <p className="">{t('jobs.noDataFound')}</p>
+          </>
+        )
       }
 
       {/* PAGINATION */}
 
       {
-        result.length > 0 ? (
+        allFilteredJobs.length > 0 ? (
           <div className="flex justify-center mt-4 space-x-8">
-            <button onClick={prevPage} disabled={currentPage === 1} className="hover:underline font-bold">
+            <button 
+              onClick={prevPage} 
+              disabled={currentPage === 1} 
+              className="hover:underline font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {t('jobs.previous')}
             </button>
-            <span className="mx-2">{t('common.page')} {currentPage} {t('common.of')} {Math.ceil(filteredItems.length / itemsPerPage)} </span>
-            <button onClick={nextPage} disabled = {currentPage === Math.ceil(filteredItems.length / itemsPerPage)} className="hover:underline font-bold">
+            <span className="mx-2">
+              {t('common.page')} {currentPage} {t('common.of')} {totalPages || 1}
+            </span>
+            <button 
+              onClick={nextPage} 
+              disabled={currentPage >= totalPages} 
+              className="hover:underline font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {t('jobs.next')}
             </button>
           </div>

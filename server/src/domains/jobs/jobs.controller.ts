@@ -139,4 +139,27 @@ export class JobsController {
       deletedJob,
     };
   }
+
+  /**
+   * Переключение видимости вакансии (скрыть/показать)
+   * PATCH /job/:id/toggle-visibility
+   * Требует авторизации и роли EMPLOYER
+   * @param id - ID вакансии
+   * @returns Обновленная вакансия с сообщением
+   */
+  @Patch('job/:id/toggle-visibility')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.EMPLOYER)
+  async toggleVisibility(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new UnauthorizedException('Пользователь не авторизован');
+    }
+    const job = await this.jobsService.toggleVisibility(id, userId);
+    const jobData = job as any;
+    return {
+      message: jobData.is_visible ? 'Вакансия успешно опубликована' : 'Вакансия успешно скрыта',
+      job,
+    };
+  }
 }

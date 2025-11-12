@@ -112,7 +112,7 @@ const JobDetailsPage = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FiDollarSign className="text-blue text-xl" />
+              <span className="text-blue text-xl font-bold">₽</span>
               <div>
                 <p className="text-sm text-gray-600">{t('jobCard.salary')}</p>
                 <p className="font-semibold">{formatSalary(job.minPrice, job.maxPrice)}</p>
@@ -164,7 +164,7 @@ const JobDetailsPage = () => {
           {/* Description Section */}
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('jobDetails.description')}</h3>
-            <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+            <p className="text-gray-700 whitespace-pre-line leading-relaxed break-words" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
               {job.description || t('common.noResults')}
             </p>
           </div>

@@ -20,7 +20,13 @@
     "location": "Местоположение",
     "posted": "Опубликовано",
     "employment": "Тип занятости",
-    "details": "Подробнее"
+    "details": "Подробнее",
+    "postedToday": "Вакансия появилась сегодня",
+    "postedYesterday": "Вакансия появилась вчера",
+    "postedThisWeek": "Вакансия появилась на этой неделе",
+    "postedThisMonth": "Вакансия появилась в этом месяце",
+    "postedThisYear": "Вакансия появилась в этом году",
+    "postedLongAgo": "Вакансия появилась давно"
   },
   "sidebar": {
     "filters": "Фильтры",
@@ -67,6 +73,10 @@
     "requiredSkills": "Требуемые навыки",
     "successMessage": "Вакансия успешно размещена",
     "updateSuccessMessage": "Вакансия успешно обновлена",
+    "updateSubmit": "Сохранить изменения",
+    "deleteJob": "Удалить вакансию",
+    "deleteConfirm": "Вы уверены, что хотите удалить эту вакансию?",
+    "deleteSuccess": "Вакансия успешно удалена",
     "errorMessage": "Не удалось разместить вакансию",
     "updateErrorMessage": "Не удалось обновить вакансию",
     "city": "Город",
@@ -100,6 +110,26 @@
       "temporary": "Временная"
     }
   },
+  "profile": {
+    "name": "Имя",
+    "phone": "Телефон",
+    "role": "Роль",
+    "employer": "Работодатель",
+    "jobSeeker": "Соискатель",
+    "changeRole": "Изменить роль",
+    "changeRoleConfirm": "Изменить роль?",
+    "changeRoleMessage": "Вы хотите изменить роль",
+    "roleChanged": "Роль изменена",
+    "roleChangedMessage": "Ваша роль успешно изменена",
+    "jobsHidden": "Вакансии скрыты",
+    "jobsHiddenMessage": "Все вакансии, которые вы создали, были скрыты и не отображаются в поиске",
+    "changeRoleError": "Не удалось изменить роль",
+    "error": "Ошибка",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "toJobs": "К вакансиям",
+    "logout": "Выйти"
+  },
   "myJobs": {
     "title": "МОИ ВАКАНСИИ",
     "allJobs": "Все вакансии",
@@ -110,12 +140,16 @@
     "salary": "ЗАРПЛАТА",
     "edit": "РЕДАКТИРОВАТЬ",
     "delete": "УДАЛИТЬ",
+    "visibility": "ВИДИМОСТЬ",
+    "hide": "Скрыть",
+    "show": "Показать",
     "previous": "Назад",
     "next": "Вперёд",
     "search": "Поиск",
     "searchPlaceholder": "Поиск по названию вакансии",
     "deleteSuccess": "Вакансия успешно удалена!",
-    "deleteError": "Не удалось удалить вакансию"
+    "deleteError": "Не удалось удалить вакансию",
+    "toggleError": "Не удалось изменить видимость вакансии"
   },
   "salary": {
     "title": "Оценка зарплаты",
@@ -218,7 +252,7 @@
   },
   "skills": {
     "selectPlaceholder": "Выберите...",
-    "createLabel": "Создать \"{inputValue}\""
+    "createLabel": "Создать навык"
   },
   "location": {
     "Elista": "Элиста",

@@ -45,6 +45,10 @@ lerna-debug.log*
 
 # Кэш TypeScript
 *.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Кеш node_modules
+node_modules/.cache
 
 # Старый Express файл (больше не используется)
 index.js

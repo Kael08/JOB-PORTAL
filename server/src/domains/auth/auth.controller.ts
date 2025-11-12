@@ -3,11 +3,12 @@
  * Обрабатывает HTTP запросы для регистрации и входа
  */
 
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, UseGuards, Request, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SendCodeDto } from './dto/send-code.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { UserRole } from '../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -53,5 +54,26 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  /**
+   * PATCH /auth/change-role/:newRole
+   * Смена роли пользователя (требует авторизации)
+   * @param newRole - Новая роль (job_seeker или employer)
+   */
+  @UseGuards(JwtAuthGuard)
+  @Patch('change-role/:newRole')
+  async changeRole(@Request() req, @Param('newRole') newRole: string) {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new Error('Пользователь не авторизован');
+    }
+
+    // Валидация роли
+    if (newRole !== UserRole.JOB_SEEKER && newRole !== UserRole.EMPLOYER) {
+      throw new Error('Неверная роль. Допустимые значения: job_seeker, employer');
+    }
+
+    return this.authService.changeRole(userId, newRole as UserRole);
   }
 }

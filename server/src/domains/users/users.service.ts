@@ -203,4 +203,24 @@ export class UsersService {
     `;
     await this.pool.query(query, [phone]);
   }
+
+  /**
+   * Смена роли пользователя
+   * @param userId - ID пользователя
+   * @param newRole - Новая роль
+   * @returns Обновленный пользователь
+   */
+  async changeRole(userId: number, newRole: UserRole): Promise<User> {
+    const query = `
+      UPDATE users
+      SET role = $1
+      WHERE id = $2
+      RETURNING *
+    `;
+    const result = await this.pool.query(query, [newRole, userId]);
+    if (result.rows.length === 0) {
+      throw new Error('Пользователь не найден');
+    }
+    return result.rows[0];
+  }
 }

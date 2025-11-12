@@ -63,4 +63,7 @@ export class Job {
 
   /** Совместимость с MongoDB: дублирует id как _id */
   _id?: number;
+
+  /** Видимость вакансии (скрыта или показана) */
+  isVisible?: boolean;
 }

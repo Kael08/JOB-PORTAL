@@ -7,24 +7,23 @@ const EmploymentTypeFilter = ({handleChange}) => {
 
   return (
     <div>
-        <h4 className="text-lg font-medium mb-2">{t('sidebar.employmentType')}</h4>
+        <h4 className="text-sm font-medium mb-1">{t('sidebar.employmentType')}</h4>
 
-        <div className="">
+        <div className="space-y-0.5">
             <label className='sidebar-label-container'>
                 <input
                     type="radio"
-                    id="test"
-                    name="test"
-                    // placeholder="placeholder"
+                    id="employmentType-all"
+                    name="employmentType"
                     value=""
                     onChange={handleChange}
                 />
                 <span className="checkmark"></span>{t('sidebar.allType')}
             </label>
 
-            <InputField handleChange={handleChange} value="Temporary" title={t('sidebar.temporary')} name="test" />
-            <InputField handleChange={handleChange} value="Part-Time" title={t('sidebar.partTime')} name="test" />
-            <InputField handleChange={handleChange} value="Full-Time" title={t('sidebar.fullTime')} name="test" />
+            <InputField handleChange={handleChange} value="Temporary" title={t('sidebar.temporary')} name="employmentType" />
+            <InputField handleChange={handleChange} value="Part-Time" title={t('sidebar.partTime')} name="employmentType" />
+            <InputField handleChange={handleChange} value="Full-Time" title={t('sidebar.fullTime')} name="employmentType" />
         </div>
     </div>
   )
