@@ -10,8 +10,8 @@
   },
   "home": {
     "title": "Найдите",
-    "subtitle": "новую работу",
-    "description": "Тысячи вакансий в Калмыкии ждут вас!",
+    "subtitle": "работу в Калмыкии!",
+    "description": "Новые вакансии каждый день!",
     "searchPlaceholder": "Должность, которую вы ищете...",
     "searchButton": "Поиск"
   },
@@ -171,7 +171,10 @@
     "benefits": "Преимущества",
     "resumeLinkLabel": "Введите ссылку на ваше резюме",
     "resumeLinkPlaceholder": "Введите ссылку",
-    "applySuccess": "Успешно откликнулись на вакансию ID: "
+    "applySuccess": "Успешно откликнулись на вакансию ID: ",
+    "phoneCopied": "Номер телефона скопирован!",
+    "phoneCopyError": "Не удалось скопировать номер телефона",
+    "phoneCopyHint": "Нажмите, чтобы скопировать"
   },
   "newsletter": {
     "emailTitle": "Получайте последние вакансии на email",

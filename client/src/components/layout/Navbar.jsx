@@ -39,7 +39,8 @@ const Navbar = () => {
 
     const navItems = getNavItems();
   return (
-    <header className='max-w-screen container mx-auto xl:px-24 px-4'>
+    <header className='fixed top-0 left-0 right-0 bg-white shadow-md z-50 w-full'>
+        <div className='max-w-screen container mx-auto xl:px-24 px-4 relative'>
         <nav className="flex justify-between items-center py-6">
             <a href="/" className="flex items-center gap-2 text-2xl text-black">
                 <img
@@ -102,7 +103,7 @@ const Navbar = () => {
         </nav>
 
         {/* NAV ITEMS FOR MOBILE */}
-        <div className={`px-4 bg-black py-5 rounded-sm ${isMenuOpen ? "" : "hidden"}`}>
+        <div className={`px-4 bg-black py-5 rounded-sm ${isMenuOpen ? "" : "hidden"} absolute top-full left-0 right-0 w-full`}>
             <ul className="">
             {navItems.map(({path, title}) => (
                         <li key={path} className="text-base text-white first:text-white py-1">
@@ -133,6 +134,7 @@ const Navbar = () => {
                 </button>
             </li>
             </ul>
+        </div>
         </div>
     </header>
   )

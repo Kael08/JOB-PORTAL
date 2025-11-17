@@ -35,11 +35,69 @@ const JobDetailsPage = () => {
       return `${Math.round(minVal).toLocaleString('ru-RU')} ₽ - ${Math.round(maxVal).toLocaleString('ru-RU')} ₽`;
     };
 
-    // Format date to YYYY-MM-DD
+    // Format date to DD month YYYY (e.g., "24 мая 2024")
     const formatDate = (dateString) => {
       if (!dateString) return 'N/A';
       const date = new Date(dateString);
-      return date.toISOString().split('T')[0];
+      const day = date.getDate();
+      const monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+      ];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    };
+
+    // Translate experience level
+    const translateExperienceLevel = (experienceLevel) => {
+      if (!experienceLevel) return 'N/A';
+      const experienceMap = {
+        'Fresher/No Experience': t('createJob.experienceOptions.fresher'),
+        'Internship': t('createJob.experienceOptions.internship'),
+        'Remote Work': t('createJob.experienceOptions.experienced'),
+        'Experienced': t('createJob.experienceOptions.experienced')
+      };
+      return experienceMap[experienceLevel] || experienceLevel;
+    };
+
+    // Copy phone number to clipboard
+    const handlePhoneClick = async (phoneNumber) => {
+      try {
+        await navigator.clipboard.writeText(phoneNumber);
+        await Swal.fire({
+          icon: 'success',
+          title: t('common.success'),
+          text: t('jobDetails.phoneCopied'),
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = phoneNumber;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          await Swal.fire({
+            icon: 'success',
+            title: t('common.success'),
+            text: t('jobDetails.phoneCopied'),
+            timer: 2000,
+            showConfirmButton: false
+          });
+        } catch (fallbackErr) {
+          await Swal.fire({
+            icon: 'error',
+            title: t('common.error'),
+            text: t('jobDetails.phoneCopyError')
+          });
+        }
+        document.body.removeChild(textArea);
+      }
     };
 
     const handleApply = async() => {
@@ -131,7 +189,7 @@ const JobDetailsPage = () => {
               <FiBriefcase className="text-blue text-xl" />
               <div>
                 <p className="text-sm text-gray-600">{t('createJob.experience')}</p>
-                <p className="font-semibold">{job.experienceLevel || 'N/A'}</p>
+                <p className="font-semibold">{translateExperienceLevel(job.experienceLevel)}</p>
               </div>
             </div>
 
@@ -149,7 +207,13 @@ const JobDetailsPage = () => {
                 <div>
                   <p className="text-sm text-gray-600">{t('createJob.phone')}</p>
                   {isAuthenticated ? (
-                    <p className="font-semibold">{job.phone}</p>
+                    <p 
+                      className="font-semibold cursor-pointer hover:text-blue transition-colors" 
+                      onClick={() => handlePhoneClick(job.phone)}
+                      title={t('jobDetails.phoneCopyHint')}
+                    >
+                      {job.phone}
+                    </p>
                   ) : (
                     <p className="font-semibold text-gray-400 flex items-center gap-2">
                       <FiLock className="text-sm" />
