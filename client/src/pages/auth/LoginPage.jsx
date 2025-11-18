@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { authApi } from '../../services/api/authApi';
+import { validateProfanity } from '../../utils/profanity-checker';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -136,6 +137,19 @@ const LoginPage = () => {
       return;
     }
 
+    // Проверка на матерные слова в имени пользователя (для новых пользователей)
+    if (!isExistingUser && name) {
+      const nameError = validateProfanity(name, 'Имя пользователя');
+      if (nameError) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Обнаружено недопустимое содержание',
+          text: nameError,
+        });
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       // Для существующих пользователей передаем null вместо имени и роли
@@ -208,6 +222,17 @@ const LoginPage = () => {
   return (
     <div className='h-screen w-full flex items-center justify-center bg-gray-50'>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <div className="mb-4">
+          <Link 
+            to="/" 
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Назад на главную
+          </Link>
+        </div>
         <h2 className="text-3xl font-bold text-center mb-6">
           {step === 1 ? 'Вход / Регистрация' : 'Подтверждение'}
         </h2>

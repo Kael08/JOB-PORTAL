@@ -5,6 +5,7 @@ import CreatableSelect from "react-select/creatable";
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../services/api/apiClient';
 import Swal from 'sweetalert2';
+import { validateMultipleFields, validateSkills } from '../../utils/profanity-checker';
 
 const UpdateJobPage = () => {
     const { t } = useTranslation();
@@ -148,6 +149,37 @@ const UpdateJobPage = () => {
     }, [phone]);
     
       const onSubmit = async (data) => {
+        // Проверка на матерные слова в полях вакансии
+        const profanityErrors = validateMultipleFields({
+          'Название вакансии': data.jobTitle,
+          'Название компании': data.companyName,
+          'Улица': data.street,
+          'Описание': data.description,
+        });
+
+        if (profanityErrors) {
+          const errorMessages = Object.values(profanityErrors).join('\n');
+          await Swal.fire({
+            icon: 'error',
+            title: 'Обнаружено недопустимое содержание',
+            text: errorMessages,
+          });
+          return;
+        }
+
+        // Проверка навыков на матерные слова
+        if (selectedOption && selectedOption.length > 0) {
+          const skillsError = validateSkills(selectedOption);
+          if (skillsError) {
+            await Swal.fire({
+              icon: 'error',
+              title: 'Обнаружено недопустимое содержание',
+              text: skillsError,
+            });
+            return;
+          }
+        }
+
         data.skills = selectedOption;
         
         // Нормализуем телефон перед отправкой

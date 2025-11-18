@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { apiClient } from '../../services/api/apiClient';
 import Swal from 'sweetalert2';
+import { validateMultipleFields, validateSkills } from '../../utils/profanity-checker';
 
 const CreateJobPage = () => {
     const { t } = useTranslation();
@@ -164,6 +165,37 @@ const CreateJobPage = () => {
           });
           navigate('/login');
           return;
+        }
+
+        // Проверка на матерные слова в полях вакансии
+        const profanityErrors = validateMultipleFields({
+          'Название вакансии': data.jobTitle,
+          'Название компании': data.companyName,
+          'Улица': data.street,
+          'Описание': data.description,
+        });
+
+        if (profanityErrors) {
+          const errorMessages = Object.values(profanityErrors).join('\n');
+          await Swal.fire({
+            icon: 'error',
+            title: 'Обнаружено недопустимое содержание',
+            text: errorMessages,
+          });
+          return;
+        }
+
+        // Проверка навыков на матерные слова
+        if (selectedOption && selectedOption.length > 0) {
+          const skillsError = validateSkills(selectedOption);
+          if (skillsError) {
+            await Swal.fire({
+              icon: 'error',
+              title: 'Обнаружено недопустимое содержание',
+              text: skillsError,
+            });
+            return;
+          }
         }
 
         // Добавляем навыки и email пользователя
