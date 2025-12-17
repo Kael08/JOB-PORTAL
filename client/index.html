@@ -15,77 +15,75 @@
         var APP_VERSION = '__BUILD_VERSION__';
         var STORED_VERSION = localStorage.getItem('app_version');
         
-        // Пропускаем в dev режиме (когда версия не заменена)
+        // Пропускаем в dev режиме
         if (APP_VERSION.indexOf('BUILD_VERSION') !== -1) return;
         
         // Функция очистки всех кук
         function clearAllCookies() {
-          var cookies = document.cookie.split(";");
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i];
-            var eqPos = cookie.indexOf("=");
-            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            name = name.trim();
+          document.cookie.split(";").forEach(function(c) {
+            var name = c.split("=")[0].trim();
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + location.hostname;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + location.hostname;
-          }
-          console.log('[Cache] Cleared all cookies');
+          });
         }
         
-        // Функция полной очистки и перезагрузки
-        function clearAndReload() {
-          console.log('[Cache] Clearing all site data...');
+        // Полная очистка ВСЕГО
+        function nukeEverything() {
+          console.log('[Cache] FULL CLEAR - nuking everything...');
           
-          // 1. Очищаем Cache API
+          // 1. Cache API
           if ('caches' in window) {
             caches.keys().then(function(names) {
-              names.forEach(function(name) {
-                caches.delete(name);
+              names.forEach(function(name) { caches.delete(name); });
+            });
+          }
+          
+          // 2. Удаляем ВСЕ Service Workers
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+              registrations.forEach(function(registration) {
+                registration.unregister();
               });
             });
           }
           
-          // 2. Очищаем все куки
+          // 3. Куки
           clearAllCookies();
           
-          // 3. Очищаем sessionStorage
+          // 4. sessionStorage
           try { sessionStorage.clear(); } catch(e) {}
           
-          // 4. Сохраняем новую версию
+          // 5. Очищаем ВСЁ в localStorage кроме версии
+          var allKeys = Object.keys(localStorage);
+          allKeys.forEach(function(key) {
+            if (key !== 'app_version') {
+              localStorage.removeItem(key);
+            }
+          });
           localStorage.setItem('app_version', APP_VERSION);
           
-          // 5. Принудительная перезагрузка без кеша
-          window.location.reload(true);
+          // 6. Принудительная перезагрузка с уникальным URL (обходит кеш)
+          window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
         }
         
         // Определяем нужна ли очистка
         var needsClear = false;
         
         if (STORED_VERSION) {
-          // Есть сохранённая версия - проверяем изменилась ли
           if (STORED_VERSION !== APP_VERSION) {
-            console.log('[Cache] Version changed from', STORED_VERSION, 'to', APP_VERSION);
             needsClear = true;
           }
         } else {
-          // Нет app_version - это старый пользователь без скрипта версионирования
-          // Проверяем есть ли признаки старого визита
-          var hasOldData = localStorage.getItem('swal-initiation') || 
-                           localStorage.getItem('language') ||
-                           localStorage.getItem('auth_token') ||
-                           document.cookie.length > 0;
-          
-          if (hasOldData) {
-            console.log('[Cache] Old user detected, clearing data...');
+          // Старый пользователь без app_version - очищаем если есть любые данные
+          if (localStorage.length > 0 || document.cookie.length > 0) {
             needsClear = true;
           }
         }
         
         if (needsClear) {
-          clearAndReload();
+          nukeEverything();
         } else {
-          // Новый пользователь или версия совпадает
           localStorage.setItem('app_version', APP_VERSION);
         }
       })();
