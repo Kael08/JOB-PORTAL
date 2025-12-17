@@ -18,11 +18,27 @@
         // Пропускаем в dev режиме (когда версия не заменена)
         if (APP_VERSION.indexOf('BUILD_VERSION') !== -1) return;
         
-        // Если версия изменилась - очищаем кеш и перезагружаем
+        // Функция очистки всех кук
+        function clearAllCookies() {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            name = name.trim();
+            // Удаляем куку для всех возможных путей и доменов
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + location.hostname;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + location.hostname;
+          }
+          console.log('[Cache] Cleared all cookies');
+        }
+        
+        // Если версия изменилась - очищаем всё и перезагружаем
         if (STORED_VERSION && STORED_VERSION !== APP_VERSION) {
           console.log('[Cache] Version changed from', STORED_VERSION, 'to', APP_VERSION);
           
-          // Очищаем все кеши браузера
+          // 1. Очищаем Cache API
           if ('caches' in window) {
             caches.keys().then(function(names) {
               names.forEach(function(name) {
@@ -32,10 +48,16 @@
             });
           }
           
-          // Сохраняем новую версию
+          // 2. Очищаем все куки
+          clearAllCookies();
+          
+          // 3. Очищаем sessionStorage
+          try { sessionStorage.clear(); } catch(e) {}
+          
+          // 4. Сохраняем новую версию
           localStorage.setItem('app_version', APP_VERSION);
           
-          // Принудительная перезагрузка без кеша
+          // 5. Принудительная перезагрузка без кеша
           window.location.reload(true);
         } else {
           // Первый визит или версия совпадает - просто сохраняем
