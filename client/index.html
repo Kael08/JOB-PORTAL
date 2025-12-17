@@ -9,6 +9,40 @@
     <meta http-equiv="Expires" content="0" />
     
     <title>rabota.elistory.ru</title>
+    <script>
+      // Версия сборки - обновляется автоматически при каждом билде Vite
+      (function() {
+        var APP_VERSION = '__BUILD_VERSION__';
+        var STORED_VERSION = localStorage.getItem('app_version');
+        
+        // Пропускаем в dev режиме (когда версия не заменена)
+        if (APP_VERSION.indexOf('BUILD_VERSION') !== -1) return;
+        
+        // Если версия изменилась - очищаем кеш и перезагружаем
+        if (STORED_VERSION && STORED_VERSION !== APP_VERSION) {
+          console.log('[Cache] Version changed from', STORED_VERSION, 'to', APP_VERSION);
+          
+          // Очищаем все кеши браузера
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              names.forEach(function(name) {
+                caches.delete(name);
+                console.log('[Cache] Deleted cache:', name);
+              });
+            });
+          }
+          
+          // Сохраняем новую версию
+          localStorage.setItem('app_version', APP_VERSION);
+          
+          // Принудительная перезагрузка без кеша
+          window.location.reload(true);
+        } else {
+          // Первый визит или версия совпадает - просто сохраняем
+          localStorage.setItem('app_version', APP_VERSION);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
