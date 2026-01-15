@@ -27,26 +27,20 @@ const CreateJobPage = () => {
 
   const minPrice = watch("minPrice");
 
-  // Функция форматирования номера телефона с маской
   const formatPhoneInput = (value) => {
-    // Удаляем все символы кроме цифр
     const digits = value.replace(/\D/g, '');
     
-    // Ограничиваем до 11 цифр (7 + 10)
     const limitedDigits = digits.slice(0, 11);
     
-    // Если начинается с 8, заменяем на 7
     let formatted = limitedDigits;
     if (formatted.startsWith('8')) {
       formatted = '7' + formatted.slice(1);
     }
     
-    // Если начинается не с 7, добавляем 7
     if (formatted.length > 0 && !formatted.startsWith('7')) {
       formatted = '7' + formatted;
     }
     
-    // Форматируем с маской: +7 (___) ___-__-__
     if (formatted.length === 0) {
       return '';
     } else if (formatted.length <= 1) {
@@ -62,23 +56,19 @@ const CreateJobPage = () => {
     }
   };
 
-  // Обработка изменения телефона
   const handlePhoneChange = (e) => {
     const input = e.target.value;
     const formatted = formatPhoneInput(input);
     setPhoneValue(formatted);
-    // Сохраняем только цифры в react-hook-form
     const digits = formatted.replace(/\D/g, '');
     setValue('phone', digits.length === 11 ? digits : '');
   };
 
-  // Валидация российского номера телефона
   const validateRussianPhone = (value) => {
-    if (!value) return true; // Поле необязательное
+    if (!value) return true;
     
     const digits = value.replace(/\D/g, '');
     
-    // Должно быть 11 цифр и начинаться с 7
     if (digits.length !== 11) {
       return 'Номер должен содержать 11 цифр';
     }
@@ -87,7 +77,6 @@ const CreateJobPage = () => {
       return 'Номер должен начинаться с 7';
     }
     
-    // Проверка на валидный российский номер (второй символ должен быть 9, 8, 7, 6, 5, 4, 3)
     const secondDigit = digits[1];
     if (!['9', '8', '7', '6', '5', '4', '3'].includes(secondDigit)) {
       return 'Неверный формат российского номера';
@@ -96,7 +85,6 @@ const CreateJobPage = () => {
     return true;
   };
 
-  // Доступные города для выбора
   const cities = ["Elista", "Lagan", "Gorodovikovsk"];
 
   const skillKeys = [
@@ -115,21 +103,16 @@ const CreateJobPage = () => {
     label: t(`skillOptions.${key}`)
   }));
 
-    // Проверяем, что пользователь авторизован и является работодателем
     useEffect(() => {
-        // Не перенаправляем, пока идет загрузка данных из localstorage
         if(loading) return;
         
         if (!isAuthenticated) {
-            // Перенаправляем на страницу входа, если не авторизован
             navigate('/', { replace: true });
         } else if (user?.role !== 'employer') {
-            // Если пользователь не работодатель, перенаправляем на главную
             navigate('/', { replace: true });
         }
     }, [isAuthenticated, user, navigate, loading]);
 
-    // Если пользователь не работодатель, показываем сообщение
     if (!isAuthenticated || user?.role !== 'employer') {
         return (
             <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-12">
@@ -167,7 +150,6 @@ const CreateJobPage = () => {
           return;
         }
 
-        // Проверка на матерные слова в полях вакансии
         const profanityErrors = validateMultipleFields({
           'Название вакансии': data.jobTitle,
           'Название компании': data.companyName,
@@ -185,7 +167,6 @@ const CreateJobPage = () => {
           return;
         }
 
-        // Проверка навыков на матерные слова
         if (selectedOption && selectedOption.length > 0) {
           const skillsError = validateSkills(selectedOption);
           if (skillsError) {
@@ -198,17 +179,12 @@ const CreateJobPage = () => {
           }
         }
 
-        // Добавляем навыки и email пользователя
         data.skills = selectedOption;
 
-        // Автоматически добавляем postedBy из данных пользователя
-        // Используем email если есть, иначе phone
         if (!data.postedBy) {
           data.postedBy = user.email || user.phone || `user_${user.id}`;
         }
 
-        // Автоматически устанавливаем сегодняшнюю дату публикации
-        // Используем локальное время, а не UTC
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth() + 1;
@@ -216,13 +192,11 @@ const CreateJobPage = () => {
         const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         data.postingDate = formattedDate;
 
-        // Нормализуем номер телефона перед отправкой (если указан)
         if (data.phone) {
           const digits = data.phone.replace(/\D/g, '');
           if (digits.length === 11 && digits.startsWith('7')) {
-            data.phone = digits; // Сохраняем только цифры в формате 7XXXXXXXXXX
+            data.phone = digits;
           } else {
-            // Если номер невалидный, удаляем его
             delete data.phone;
           }
         }
@@ -239,7 +213,7 @@ const CreateJobPage = () => {
             });
             reset();
             setSelectedOption(null);
-            setPhoneValue(''); // Сбрасываем маску телефона
+            setPhoneValue('');
           }
         } catch (error) {
           console.error("Error posting job:", error);
@@ -253,11 +227,9 @@ const CreateJobPage = () => {
 
   return (
     <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
-{/* Form */}
 <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
 <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
 
-    {/* First Row */}
     <div className="create-job-flex">
         <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.jobTitle')}</label>
@@ -271,7 +243,6 @@ const CreateJobPage = () => {
         </div>
     </div>
 
-    {/* 2nd Row */}
     <div className="create-job-flex">
         <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.minSalary')}</label>
@@ -309,8 +280,6 @@ const CreateJobPage = () => {
         </div>
     </div>
 
-    {/* Third Row */}
-
     <div className="create-job-flex">
         <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.salaryType')}</label>
@@ -331,7 +300,6 @@ const CreateJobPage = () => {
         </div>
     </div>
 
-    {/* Address Row - Street and Apartment */}
     <div className="create-job-flex">
         <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
@@ -355,8 +323,6 @@ const CreateJobPage = () => {
         </div>
     </div>
 
-    {/* Fourth Row */}
-
     <div className="create-job-flex">
       <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.experience')}</label>
@@ -378,8 +344,6 @@ const CreateJobPage = () => {
       </div>
     </div>
 
-    {/* Sixth Row */}
-
     <div className="">
       <label className='block mb-2 text-lg'>{t('createJob.requiredSkills')}</label>
       <CreatableSelect
@@ -391,9 +355,7 @@ const CreateJobPage = () => {
       placeholder={t('skills.selectPlaceholder')}
       formatCreateLabel={() => t('skills.createLabel')}/>
     </div>
-    
 
-    {/* 8th Row */}
     <div className="w-full">
       <label className='block mb-2 text-lg'>{t('createJob.description')}</label>
       <textarea className='w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-700'
@@ -404,7 +366,6 @@ const CreateJobPage = () => {
       style={{ resize: 'none' }}/>
     </div>
 
-    {/* Last Row */}
     <div className="create-job-flex">
       <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
@@ -426,13 +387,11 @@ const CreateJobPage = () => {
               value={phoneValue}
               onChange={(e) => {
                 handlePhoneChange(e);
-                // Синхронизируем с react-hook-form
                 const digits = e.target.value.replace(/\D/g, '');
                 field.onChange(digits.length === 11 ? digits : '');
               }}
               onBlur={(e) => {
                 field.onBlur();
-                // При потере фокуса нормализуем номер
                 const digits = e.target.value.replace(/\D/g, '');
                 if (digits.length === 11 && digits.startsWith('7')) {
                   const formatted = formatPhoneInput(digits);
@@ -444,7 +403,7 @@ const CreateJobPage = () => {
                 }
               }}
               className='create-job-input'
-              maxLength={18} // +7 (___) ___-__-__ = 18 символов
+              maxLength={18}
             />
           )}
         />

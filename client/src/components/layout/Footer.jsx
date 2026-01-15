@@ -15,7 +15,6 @@ const Footer = () => {
           </a>
         </div>
 
-        {/* Информация о компании */}
         <div className="border-t border-gray-800 pt-8 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
@@ -51,7 +50,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Нижняя часть footer */}
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">

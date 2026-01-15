@@ -1,9 +1,3 @@
-/**
- * Панель отладки авторизации
- * Показывает состояние токена и пользователя
- * ВНИМАНИЕ: Использовать только в разработке!
- */
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -14,7 +8,6 @@ const AuthDebugPanel = () => {
   const [localStorageUser, setLocalStorageUser] = useState(null);
 
   useEffect(() => {
-    // Обновляем данные из localStorage
     const updateLocalStorage = () => {
       setLocalStorageToken(localStorage.getItem('auth_token'));
       setLocalStorageUser(localStorage.getItem('auth_user'));
@@ -22,7 +15,6 @@ const AuthDebugPanel = () => {
 
     updateLocalStorage();
 
-    // Обновляем каждую секунду
     const interval = setInterval(updateLocalStorage, 1000);
 
     return () => clearInterval(interval);
@@ -58,7 +50,6 @@ const AuthDebugPanel = () => {
       </div>
 
       <div className="space-y-3 text-sm">
-        {/* Состояние из Context */}
         <div className="border-b pb-2">
           <h4 className="font-semibold mb-1 text-purple-600">📦 AuthContext</h4>
           <div className="space-y-1">
@@ -84,7 +75,6 @@ const AuthDebugPanel = () => {
           </div>
         </div>
 
-        {/* Состояние из localStorage */}
         <div className="border-b pb-2">
           <h4 className="font-semibold mb-1 text-purple-600">💾 LocalStorage</h4>
           <div className="space-y-1">
@@ -104,7 +94,6 @@ const AuthDebugPanel = () => {
           </div>
         </div>
 
-        {/* Диагностика */}
         <div>
           <h4 className="font-semibold mb-1 text-purple-600">🔍 Диагностика</h4>
           <div className="space-y-1 text-xs">
@@ -136,7 +125,6 @@ const AuthDebugPanel = () => {
           </div>
         </div>
 
-        {/* Действия */}
         <div className="flex gap-2">
           <button
             onClick={() => {

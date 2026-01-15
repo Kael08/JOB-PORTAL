@@ -1,13 +1,5 @@
-/**
- * Конфигурация для подключения к базе данных PostgreSQL
- * Используется ConfigService для безопасного доступа к переменным окружения
- */
-
 import { ConfigService } from '@nestjs/config';
 
-/**
- * Интерфейс для настроек базы данных
- */
 export interface DatabaseConfig {
   host: string;
   port: number;
@@ -16,11 +8,6 @@ export interface DatabaseConfig {
   password: string;
 }
 
-/**
- * Получает конфигурацию базы данных из переменных окружения
- * @param configService - Сервис конфигурации NestJS
- * @returns Объект с настройками подключения к БД
- */
 export const getDatabaseConfig = (
   configService: ConfigService,
 ): DatabaseConfig => ({

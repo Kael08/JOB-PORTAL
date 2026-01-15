@@ -1,8 +1,3 @@
-/**
- * Контроллер авторизации
- * Обрабатывает HTTP запросы для регистрации и входа
- */
-
 import { Controller, Post, Body, Get, Patch, UseGuards, Request, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SendCodeDto } from './dto/send-code.dto';
@@ -14,19 +9,11 @@ import { UserRole } from '../users/entities/user.entity';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  /**
-   * POST /auth/send-code
-   * Отправка SMS кода на телефон
-   */
   @Post('send-code')
   async sendCode(@Body() sendCodeDto: SendCodeDto) {
     return this.authService.sendCode(sendCodeDto);
   }
 
-  /**
-   * POST /auth/verify-code
-   * Верификация кода и регистрация/вход
-   */
   @Post('verify-code')
   async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
     console.log('📥 AuthController.verifyCode - получены данные:', verifyCodeDto);
@@ -46,21 +33,12 @@ export class AuthController {
     }
   }
 
-  /**
-   * GET /auth/profile
-   * Получение профиля текущего пользователя (требует авторизации)
-   */
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
   }
 
-  /**
-   * PATCH /auth/change-role/:newRole
-   * Смена роли пользователя (требует авторизации)
-   * @param newRole - Новая роль (job_seeker или employer)
-   */
   @UseGuards(JwtAuthGuard)
   @Patch('change-role/:newRole')
   async changeRole(@Request() req, @Param('newRole') newRole: string) {
@@ -69,7 +47,6 @@ export class AuthController {
       throw new Error('Пользователь не авторизован');
     }
 
-    // Валидация роли
     if (newRole !== UserRole.JOB_SEEKER && newRole !== UserRole.EMPLOYER) {
       throw new Error('Неверная роль. Допустимые значения: job_seeker, employer');
     }

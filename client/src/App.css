@@ -28,8 +28,6 @@ li {
   cursor: pointer;
 }
 
-/* jobs page */
-
 .card {
   margin: 20px;
   border: 2px solid #ededed;
@@ -139,10 +137,6 @@ li {
   margin-top: 3rem;
   border-color: #f7f7f7;
 }
-
-
-
-/* create a job page */
 
 .create-job-flex{
   @apply flex flex-col lg:flex-row items-center justify-between gap-8;

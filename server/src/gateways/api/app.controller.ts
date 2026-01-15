@@ -1,16 +1,7 @@
-/**
- * Главный контроллер приложения
- * Обрабатывает базовые маршруты
- */
-
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  /**
-   * Базовый маршрут для проверки работоспособности API
-   * GET /
-   */
   @Get()
   getRoot(): { message: string; timestamp: string } {
     return {

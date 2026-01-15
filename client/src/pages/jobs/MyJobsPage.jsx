@@ -13,11 +13,9 @@ const MyJobsPage = () => {
     const [searchText, setSearchText] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
-//Set Current Page
 const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 4;
 
-    // Проверяем авторизацию и роль
     useEffect(() => {
         if(loading) return;
 
@@ -32,7 +30,6 @@ const itemsPerPage = 4;
     }, [isAuthenticated, user, navigate, loading]);
 
     useEffect(() => {
-      // Ждем загрузки данных из localStorage
       if (loading) return;
       
       if (!user?.id) {
@@ -41,7 +38,6 @@ const itemsPerPage = 4;
 
       setIsLoading(true);
 
-      // apiClient уже добавляет базовый URL, поэтому передаем только путь
       apiClient.get('/myJobs')
         .then(data => {
           setJobs(data);
@@ -52,13 +48,9 @@ const itemsPerPage = 4;
         });
   }, [loading, user]);
 
-    //Pagination
-
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentJobs = jobs.slice(indexOfFirstItem, indexOfLastItem);
-
-    // For Next and Previous Button
 
     const nextPage = () => {
       if (indexOfLastItem < jobs.length){
@@ -89,7 +81,6 @@ const itemsPerPage = 4;
             timer: 2000,
             showConfirmButton: false
           });
-          // Refresh the jobs list
           window.location.reload();
         }
       } catch (error) {
@@ -101,7 +92,6 @@ const itemsPerPage = 4;
       }
     };
 
-    // console.log(searchText)
       return (
     <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
       <div className="my-jobs-container">
@@ -114,8 +104,8 @@ const itemsPerPage = 4;
           name="search"
           placeholder={t('myJobs.searchPlaceholder')}
           className="py-2 pl-3 border focus-within:ring-indigo-600 lg:w-6/12 mb-4 w-full"
-          style={{ // Inline style to set focus ring color
-            outlineColor: '#4F46E5', // Replace with your desired blue color
+          style={{
+            outlineColor: '#4F46E5',
           }}
         />
         <button className="bg-blue text-white font-semibold px-8 py-2 rounded-sm mb-4" onClick={handleSearch}>
@@ -124,7 +114,6 @@ const itemsPerPage = 4;
       </div>
       </div>
 
-      {/* Table */}
       <section className="py-1 bg-blueGray-50">
 <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-5">
   <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
@@ -177,7 +166,6 @@ const itemsPerPage = 4;
             <tbody>
               {
                 currentJobs.map((job, index) => {
-                  // Проверяем оба варианта: is_visible (snake_case) и isVisible (camelCase)
                   const isVisibleValue = job.is_visible !== undefined ? job.is_visible : (job.isVisible !== undefined ? job.isVisible : true);
                   const isVisible = isVisibleValue === true || isVisibleValue === 'true' || isVisibleValue === 1;
                   
@@ -225,8 +213,6 @@ const itemsPerPage = 4;
     </div>
   </div>
 </div>
-
-{/* Pagination */}
 
 <div className="flex justify-center text-black space-x-8 mb-8">
   {

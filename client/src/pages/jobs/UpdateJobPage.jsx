@@ -13,35 +13,27 @@ const UpdateJobPage = () => {
     const navigate = useNavigate();
     const jobData = useLoaderData();
     
-    // Обрабатываем ответ от сервера (может быть объект или массив)
     const job = Array.isArray(jobData) ? jobData[0] : jobData;
     const {_id, jobTitle, companyName, salaryType, city, street, apartment, minPrice: existingMinPrice, maxPrice: existingMaxPrice,
         experienceLevel, companyLogo, employmentType, description, postedBy, phone, skills} = job;
 
-    // Доступные города для выбора
     const cities = ["Elista", "Lagan", "Gorodovikovsk"];
 
-    // Функция форматирования номера телефона с маской
     const formatPhoneInput = (value) => {
       if (!value) return '';
-      // Удаляем все символы кроме цифр
       const digits = value.replace(/\D/g, '');
       
-      // Ограничиваем до 11 цифр (7 + 10)
       const limitedDigits = digits.slice(0, 11);
       
-      // Если начинается с 8, заменяем на 7
       let formatted = limitedDigits;
       if (formatted.startsWith('8')) {
         formatted = '7' + formatted.slice(1);
       }
       
-      // Если начинается не с 7, добавляем 7
       if (formatted.length > 0 && !formatted.startsWith('7')) {
         formatted = '7' + formatted;
       }
       
-      // Форматируем с маской: +7 (___) ___-__-__
       if (formatted.length === 0) {
         return '';
       } else if (formatted.length <= 1) {
@@ -57,7 +49,6 @@ const UpdateJobPage = () => {
       }
     };
 
-    // Преобразуем навыки в формат для CreatableSelect
     const normalizeSkillsForSelect = (skillsData) => {
       if (!skillsData || !Array.isArray(skillsData)) return [];
       return skillsData.map(skill => {
@@ -107,23 +98,19 @@ const UpdateJobPage = () => {
 
     const minPrice = watch("minPrice");
 
-    // Обработка изменения телефона
     const handlePhoneChange = (e) => {
       const input = e.target.value;
       const formatted = formatPhoneInput(input);
       setPhoneValue(formatted);
-      // Сохраняем только цифры в react-hook-form
       const digits = formatted.replace(/\D/g, '');
       setValue('phone', digits.length === 11 ? digits : '');
     };
 
-    // Валидация российского номера телефона
     const validateRussianPhone = (value) => {
-      if (!value) return true; // Поле необязательное
+      if (!value) return true;
       
       const digits = value.replace(/\D/g, '');
       
-      // Должно быть 11 цифр и начинаться с 7
       if (digits.length !== 11) {
         return 'Номер должен содержать 11 цифр';
       }
@@ -132,7 +119,6 @@ const UpdateJobPage = () => {
         return 'Номер должен начинаться с 7';
       }
       
-      // Проверка на валидный российский номер (второй символ должен быть 9, 8, 7, 6, 5, 4, 3)
       const secondDigit = digits[1];
       if (!['9', '8', '7', '6', '5', '4', '3'].includes(secondDigit)) {
         return 'Неверный формат российского номера';
@@ -141,7 +127,6 @@ const UpdateJobPage = () => {
       return true;
     };
 
-    // Инициализация phoneValue при загрузке
     useEffect(() => {
       if (phone) {
         setPhoneValue(formatPhoneInput(phone));
@@ -149,7 +134,6 @@ const UpdateJobPage = () => {
     }, [phone]);
     
       const onSubmit = async (data) => {
-        // Проверка на матерные слова в полях вакансии
         const profanityErrors = validateMultipleFields({
           'Название вакансии': data.jobTitle,
           'Название компании': data.companyName,
@@ -167,7 +151,6 @@ const UpdateJobPage = () => {
           return;
         }
 
-        // Проверка навыков на матерные слова
         if (selectedOption && selectedOption.length > 0) {
           const skillsError = validateSkills(selectedOption);
           if (skillsError) {
@@ -182,7 +165,6 @@ const UpdateJobPage = () => {
 
         data.skills = selectedOption;
         
-        // Нормализуем телефон перед отправкой
         if (data.phone) {
           const digits = data.phone.replace(/\D/g, '');
           data.phone = digits.length === 11 ? digits : '';
@@ -199,7 +181,6 @@ const UpdateJobPage = () => {
               showConfirmButton: false
             });
             reset();
-            // Перезагружаем страницу для обновления данных на главной
             window.location.reload();
           }
         } catch (error) {
@@ -260,11 +241,9 @@ const UpdateJobPage = () => {
             
   return (
     <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4'>
-    {/* Form */}
     <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
     <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-    
-        {/* First Row */}
+
         <div className="create-job-flex">
             <div className="lg:w-1/2 w-full">
             <label className='block mb-2 text-lg'>{t('createJob.jobTitle')}</label>
@@ -278,7 +257,6 @@ const UpdateJobPage = () => {
             </div>
         </div>
 
-        {/* 2nd Row */}
         <div className="create-job-flex">
           <div className="lg:w-1/2 w-full">
             <label className='block mb-2 text-lg'>{t('createJob.minSalary')}</label>
@@ -315,8 +293,6 @@ const UpdateJobPage = () => {
             )}
           </div>
       </div>
-    
-        {/* Third Row */}
 
         <div className="create-job-flex">
             <div className="lg:w-1/2 w-full">
@@ -338,7 +314,6 @@ const UpdateJobPage = () => {
             </div>
         </div>
 
-        {/* Address Row - Street and Apartment */}
         <div className="create-job-flex">
           <div className="lg:w-1/2 w-full">
           <label className='block mb-2 text-lg'>{t('createJob.street')}</label>
@@ -362,8 +337,6 @@ const UpdateJobPage = () => {
           </div>
       </div>
 
-        {/* Fourth Row */}
-
         <div className="create-job-flex">
       <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.experience')}</label>
@@ -385,8 +358,6 @@ const UpdateJobPage = () => {
       </div>
     </div>
 
-    {/* Sixth Row */}
-
     <div className="">
       <label className='block mb-2 text-lg'>{t('createJob.requiredSkills')}</label>
       <CreatableSelect
@@ -399,7 +370,6 @@ const UpdateJobPage = () => {
       formatCreateLabel={() => t('skills.createLabel')}/>
     </div>
 
-    {/* 8th Row */}
     <div className="w-full">
     <label className='block mb-2 text-lg'>{t('createJob.description')}</label>
     <textarea className='w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-700'
@@ -410,7 +380,6 @@ const UpdateJobPage = () => {
     style={{ resize: 'none' }}/>
     </div>
 
-    {/* Last Row */}
     <div className="create-job-flex">
       <div className="lg:w-1/2 w-full">
         <label className='block mb-2 text-lg'>{t('createJob.postedBy')}</label>
@@ -432,13 +401,11 @@ const UpdateJobPage = () => {
               value={phoneValue}
               onChange={(e) => {
                 handlePhoneChange(e);
-                // Синхронизируем с react-hook-form
                 const digits = e.target.value.replace(/\D/g, '');
                 field.onChange(digits.length === 11 ? digits : '');
               }}
               onBlur={(e) => {
                 field.onBlur();
-                // При потере фокуса нормализуем номер
                 const digits = e.target.value.replace(/\D/g, '');
                 if (digits.length === 11 && digits.startsWith('7')) {
                   const formatted = formatPhoneInput(digits);

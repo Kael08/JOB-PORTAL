@@ -11,41 +11,34 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login, user, logout, isAuthenticated} = useAuth();
 
-  const [step, setStep] = useState(1); // 1 - ввод телефона, 2 - ввод кода
+  const [step, setStep] = useState(1);
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState('job_seeker');
   const [loading, setLoading] = useState(false);
-  const [isExistingUser, setIsExistingUser] = useState(false); // Флаг существующего пользователя
+  const [isExistingUser, setIsExistingUser] = useState(false);
 
-  // Если пользователь уже авторизован, перенаправляем на главную
   React.useEffect(() => {
     if (!loading && isAuthenticated && user) {
       navigate('/', { replace: true });
     }
   }, [loading, isAuthenticated, user, navigate]);
 
-  // Функция нормализации номера телефона
   const normalizePhone = (phoneNumber) => {
-    // Удаляем все символы кроме цифр
     let digits = phoneNumber.replace(/\D/g, '');
 
-    // Если номер начинается с 8, заменяем на 7
     if (digits.startsWith('8')) {
       digits = '7' + digits.slice(1);
     }
 
-    // Если номер начинается с 9 (без кода страны), добавляем 7
     if (digits.startsWith('9') && digits.length === 10) {
       digits = '7' + digits;
     }
 
-    // Добавляем + в начало
     return '+' + digits;
   };
 
-  // Функция форматирования номера для отображения
   const formatPhoneDisplay = (phoneNumber) => {
     const digits = phoneNumber.replace(/\D/g, '');
     if (digits.length === 11 && digits.startsWith('7')) {
@@ -54,15 +47,12 @@ const LoginPage = () => {
     return phoneNumber;
   };
 
-  // Обработка ввода номера телефона
   const handlePhoneChange = (e) => {
     const input = e.target.value;
-    // Позволяем вводить только цифры и символы + ( ) -
     const filtered = input.replace(/[^\d+()-\s]/g, '');
     setPhone(filtered);
   };
 
-  // Шаг 1: Отправка SMS кода
   const handleSendCode = async (e) => {
     e.preventDefault();
 
@@ -75,10 +65,8 @@ const LoginPage = () => {
       return;
     }
 
-    // Нормализуем номер
     const normalizedPhone = normalizePhone(phone);
 
-    // Проверяем, что номер содержит 11 цифр (7XXXXXXXXXX)
     const digits = normalizedPhone.replace(/\D/g, '');
     if (digits.length !== 11 || !digits.startsWith('7')) {
       Swal.fire({
@@ -92,8 +80,8 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const response = await authApi.sendCode(normalizedPhone);
-      setPhone(normalizedPhone); // Сохраняем нормализованный номер
-      setIsExistingUser(response.isExistingUser || false); // Сохраняем флаг существующего пользователя
+      setPhone(normalizedPhone);
+      setIsExistingUser(response.isExistingUser || false);
 
       await Swal.fire({
         icon: 'success',
@@ -114,7 +102,6 @@ const LoginPage = () => {
     }
   };
 
-  // Шаг 2: Верификация кода
   const handleVerifyCode = async (e) => {
     e.preventDefault();
 
@@ -127,7 +114,6 @@ const LoginPage = () => {
       return;
     }
 
-    // Для новых пользователей требуем имя и роль
     if (!isExistingUser && (!name || !role)) {
       Swal.fire({
         icon: 'error',
@@ -137,7 +123,6 @@ const LoginPage = () => {
       return;
     }
 
-    // Проверка на матерные слова в имени пользователя (для новых пользователей)
     if (!isExistingUser && name) {
       const nameError = validateProfanity(name, 'Имя пользователя');
       if (nameError) {
@@ -152,7 +137,6 @@ const LoginPage = () => {
 
     setLoading(true);
     try {
-      // Для существующих пользователей передаем null вместо имени и роли
       const result = await login(
         phone,
         code.trim(),
@@ -169,7 +153,6 @@ const LoginPage = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-        // Небольшая задержка, чтобы состояние успело обновиться
         setTimeout(() => {
           navigate('/', { replace: true });
         }, 100);
@@ -195,7 +178,6 @@ const LoginPage = () => {
     });
   };
 
-  // Если пользователь уже авторизован
   if (user) {
     return (
       <div className='h-screen w-full flex items-center justify-center'>
@@ -277,7 +259,6 @@ const LoginPage = () => {
           </form>
         ) : step === 2 ? (
           <form onSubmit={handleVerifyCode} className="space-y-4">
-            {/* Показываем номер телефона */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
               <p className="text-sm text-gray-600 mb-1">
                 {isExistingUser ? 'С возвращением! Код отправлен на:' : 'Код отправлен на номер:'}
@@ -303,7 +284,6 @@ const LoginPage = () => {
               </p>
             </div>
 
-            {/* Показываем поля имени и роли только для новых пользователей */}
             {!isExistingUser && (
               <>
                 <div>

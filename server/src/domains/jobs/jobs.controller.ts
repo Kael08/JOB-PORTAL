@@ -1,8 +1,3 @@
-/**
- * Контроллер для работы с вакансиями
- * Обрабатывает HTTP запросы и маршруты, связанные с вакансиями
- */
-
 import {
   Controller,
   Get,
@@ -30,19 +25,11 @@ import { UserRole } from '../users/entities/user.entity';
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
 
-  /**
-   * Создание новой вакансии
-   * POST /post-job
-   * Требует авторизации и роли EMPLOYER
-   * @param createJobDto - Данные для создания вакансии
-   * @returns Созданная вакансия с сообщением об успехе
-   */
   @Post('post-job')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EMPLOYER)
   @HttpCode(HttpStatus.OK)
   async create(@Body() createJobDto: CreateJobDto, @Request() req) {
-    // Получаем userId из JWT токена (req.user устанавливается JwtAuthGuard)
     const userId = req.user?.id;
     const job = await this.jobsService.create(createJobDto, userId);
     
@@ -52,12 +39,6 @@ export class JobsController {
     };
   }
 
-  /**
-   * Получение вакансий текущего авторизованного пользователя
-   * GET /myJobs
-   * Требует авторизации
-   * @returns Массив вакансий пользователя
-   */
   @Get('myJobs')
   @UseGuards(JwtAuthGuard)
   async findMyJobs(@Request() req) {
@@ -68,46 +49,21 @@ export class JobsController {
     return this.jobsService.findByUserId(userId);
   }
 
-  /**
-   * Получение всех вакансий
-   * GET /all-jobs
-   * @returns Массив всех вакансий
-   */
   @Get('all-jobs')
   async findAll() {
     return this.jobsService.findAll();
   }
 
-  /**
-   * Получение одной вакансии по ID
-   * GET /all-jobs/:id
-   * @param id - ID вакансии
-   * @returns Найденная вакансия
-   */
   @Get('all-jobs/:id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.jobsService.findOne(id);
   }
 
-  /**
-   * Получение вакансий конкретного пользователя по email или телефону
-   * GET /myJobs/:identifier
-   * @param identifier - Email или телефон пользователя
-   * @returns Массив вакансий пользователя
-   */
   @Get('myJobs/:identifier')
   async findByIdentifier(@Param('identifier') identifier: string) {
     return this.jobsService.findByIdentifier(identifier);
   }
 
-  /**
-   * Обновление вакансии
-   * PATCH /update-job/:id
-   * Требует авторизации и роли EMPLOYER
-   * @param id - ID вакансии для обновления
-   * @param updateJobDto - Новые данные вакансии
-   * @returns Обновленная вакансия с сообщением об успехе
-   */
   @Patch('update-job/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EMPLOYER)
@@ -122,13 +78,6 @@ export class JobsController {
     };
   }
 
-  /**
-   * Удаление вакансии
-   * DELETE /job/:id
-   * Требует авторизации и роли EMPLOYER
-   * @param id - ID вакансии для удаления
-   * @returns Сообщение об успешном удалении
-   */
   @Delete('job/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EMPLOYER)
@@ -140,13 +89,6 @@ export class JobsController {
     };
   }
 
-  /**
-   * Переключение видимости вакансии (скрыть/показать)
-   * PATCH /job/:id/toggle-visibility
-   * Требует авторизации и роли EMPLOYER
-   * @param id - ID вакансии
-   * @returns Обновленная вакансия с сообщением
-   */
   @Patch('job/:id/toggle-visibility')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.EMPLOYER)

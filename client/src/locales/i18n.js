@@ -4,7 +4,6 @@ import enTranslation from './en.json';
 import ruTranslation from './ru.json';
 import klmTranslation from './klm.json'
 
-// Get saved language from localStorage or default to 'en'
 const savedLanguage = localStorage.getItem('language') || 'ru';
 
 i18n
@@ -18,13 +17,12 @@ i18n
         translation: ruTranslation
       }
     },
-    lng: savedLanguage, // default language
+    lng: savedLanguage,
     fallbackLng: 'klm',
     interpolation: {
-      escapeValue: false // react already safes from xss
+      escapeValue: false
     },
     pluralSeparator: '_',
-    // Russian pluralization rules
     pluralRules: {
       ru: (count) => {
         const mod10 = count % 10;

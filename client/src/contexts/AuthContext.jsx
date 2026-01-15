@@ -1,8 +1,3 @@
-/**
- * Контекст авторизации
- * Управляет состоянием пользователя и JWT токена
- */
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authApi } from '../services/api/authApi';
 
@@ -21,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Загрузка данных из localStorage при монтировании
   useEffect(() => {
     console.log('🔄 AuthContext: Загрузка данных из localStorage...');
     const storedToken = localStorage.getItem('auth_token');
@@ -32,14 +26,12 @@ export const AuthProvider = ({ children }) => {
       user: storedUser ? JSON.parse(storedUser).name : 'ОТСУТСТВУЕТ'
     });
 
-    // Проверяем что токен валидный (не undefined и не null)
     if (storedToken && storedUser && storedToken !== 'undefined' && storedToken !== 'null') {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
       console.log('✅ Данные загружены из localStorage');
     } else {
       console.log('⚠️ Токен или пользователь отсутствуют/невалидны в localStorage');
-      // Очищаем невалидные данные
       if (storedToken === 'undefined' || storedToken === 'null') {
         console.log('🗑️ Очистка невалидных данных...');
         localStorage.removeItem('auth_token');
@@ -49,12 +41,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Вход в систему
   const login = async (phone, code, name, role) => {
     try {
       console.log('🔐 AuthContext.login - начало', { phone, code, name, role });
 
-      // Формируем объект для отправки (не включаем null значения)
       const requestData = { phone, code };
       if (name !== null && name !== undefined) {
         requestData.name = name;
@@ -69,7 +59,6 @@ export const AuthProvider = ({ children }) => {
 
       console.log('📨 AuthContext.login - ответ от сервера:', data);
 
-      // Проверяем оба варианта названия поля (access_token и accessToken)
       const token = data.access_token || data.accessToken;
 
       if (!token) {
@@ -86,7 +75,6 @@ export const AuthProvider = ({ children }) => {
       setToken(token);
       setUser(data.user);
 
-      // Сохраняем в localStorage только если токен валидный
       if (token && token !== 'undefined') {
         localStorage.setItem('auth_token', token);
         localStorage.setItem('auth_user', JSON.stringify(data.user));
@@ -103,7 +91,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Выход из системы
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -111,12 +98,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('auth_user');
   };
 
-  // Проверка роли пользователя
   const hasRole = (role) => {
     return user?.role === role;
   };
 
-  // Обновление данных пользователя
   const updateUser = (newUser, newToken) => {
     setUser(newUser);
     if (newToken) {

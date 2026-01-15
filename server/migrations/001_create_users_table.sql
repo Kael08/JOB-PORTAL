@@ -33,8 +33,8 @@ CREATE TRIGGER update_users_updated_at
     BEFORE UPDATE ON users
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
-
 -- Вставка тестовых данных (опционально, можно удалить)
 -- INSERT INTO users (phone, name, role) VALUES
 --   ('+79991234567', 'Тестовый работодатель', 'employer'),
 --   ('+79997654321', 'Тестовый соискатель', 'job_seeker');
+

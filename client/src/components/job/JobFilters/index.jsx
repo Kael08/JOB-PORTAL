@@ -15,7 +15,6 @@ const Sidebar = ({handleChange, handleClick}) => {
 
     <LocationFilter handleChange={handleChange}/>
     <SalaryFilter handleChange={handleChange} handleClick={handleClick}/>
-    {/* {<JobPostingData handleChange = {handleChange}/>} */}
     <WorkExperienceFilter handleChange = {handleChange}/>
     <EmploymentTypeFilter handleChange = {handleChange}/>
 

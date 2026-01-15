@@ -1,15 +1,6 @@
-/**
- * Сервис для работы с API авторизации
- */
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const authApi = {
-  /**
-   * Отправка SMS кода на телефон
-   * @param {string} phone - Номер телефона в международном формате
-   * @returns {Promise<{message: string}>}
-   */
   async sendCode(phone) {
     const response = await fetch(`${API_URL}/auth/send-code`, {
       method: 'POST',
@@ -27,15 +18,6 @@ export const authApi = {
     return response.json();
   },
 
-  /**
-   * Верификация кода и регистрация/вход
-   * @param {object} data - Данные для верификации
-   * @param {string} data.phone - Номер телефона
-   * @param {string} data.code - Код верификации
-   * @param {string} data.name - Имя пользователя
-   * @param {string} data.role - Роль (job_seeker или employer)
-   * @returns {Promise<{access_token: string, user: object}>}
-   */
   async verifyCode(data) {
     console.log('📤 authApi.verifyCode - отправка данных:', data);
 
@@ -76,11 +58,6 @@ export const authApi = {
     return result;
   },
 
-  /**
-   * Получение профиля пользователя
-   * @param {string} token - JWT токен
-   * @returns {Promise<object>}
-   */
   async getProfile(token) {
     const response = await fetch(`${API_URL}/auth/profile`, {
       method: 'GET',

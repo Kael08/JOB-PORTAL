@@ -1,7 +1,3 @@
-/**
- * Декоратор для указания требуемых ролей
- */
-
 import { SetMetadata } from '@nestjs/common';
 import { UserRole } from '../../users/entities/user.entity';
 

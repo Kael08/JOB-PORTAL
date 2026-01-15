@@ -6,16 +6,13 @@ const JobPostingData = ({handleChange}) => {
 const { t } = useTranslation();
 
 const now = new Date();
-// console.log(now)
 const twentyFourHoursAgo = new Date( now - 24 * 60 * 60 * 1000);
 const SevenDaysAgo = new Date( now - 7 * 24 * 60 * 60 * 1000);
 const ThirtyDaysAgo = new Date( now - 30 * 24 * 60 * 60 * 1000);
 
-// Convert Data to String
 const twentyFourHoursAgoDate = twentyFourHoursAgo.toISOString().slice(0, 10);
 const SevenDaysAgoDate = SevenDaysAgo.toISOString().slice(0, 10);
 const ThirtyDaysAgoDate = ThirtyDaysAgo.toISOString().slice(0, 10);
-// console.log(twentyFourHoursAgoDate)
 
 return (
     <div>
@@ -27,7 +24,6 @@ return (
                 type="radio"
                 id="test"
                 name="test"
-                // placeholder="placeholder"
                 value=""
                 onChange={handleChange}
             />

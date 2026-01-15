@@ -1,8 +1,3 @@
-/**
- * JWT стратегия для Passport
- * Используется для валидации JWT токенов
- */
-
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -22,10 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  /**
-   * Валидация payload из JWT токена
-   * @param payload - Данные из токена
-   */
   async validate(payload: any) {
     const user = await this.authService.validateUser(payload.sub);
 

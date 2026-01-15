@@ -14,18 +14,14 @@ root.render(
   </AuthProvider>,
 );
 
-// Обработка редиректа ПОСЛЕ полной загрузки React (если нужна очистка кеша)
 if (window.__NEEDS_RELOAD__) {
-  // Ждем полного монтирования React (включая все useEffect)
   setTimeout(() => {
-    // Проверяем, что React действительно смонтировался
     const rootElement = document.getElementById('root');
     if (rootElement && rootElement.children.length > 0) {
       console.log('[Cache] React mounted, reloading with cache bust...');
       window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
     } else {
-      // Если React не смонтировался, редирект все равно нужен
       window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
     }
-  }, 500); // Задержка для надежного монтирования React
+  }, 500);
 }

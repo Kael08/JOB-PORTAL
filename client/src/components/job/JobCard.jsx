@@ -7,21 +7,18 @@ const JobCard = ({data}) => {
 const {_id, companyName, jobTitle, minPrice, maxPrice, employmentType, postingDate, description} = data;
 const { t } = useTranslation();
 
-// Format salary in rubles
 const formatSalary = (min, max) => {
   const minVal = parseFloat(min);
   const maxVal = parseFloat(max);
   return `${Math.round(minVal).toLocaleString('ru-RU')} ₽ - ${Math.round(maxVal).toLocaleString('ru-RU')} ₽`;
 };
 
-// Get relative time (today, this week, this month, etc.)
 const getRelativeTime = (dateString) => {
   if (!dateString) return t('jobCard.postedLongAgo');
   
   const now = new Date();
   const jobDate = new Date(dateString);
   
-  // Set time to midnight for accurate day comparison
   now.setHours(0, 0, 0, 0);
   jobDate.setHours(0, 0, 0, 0);
   

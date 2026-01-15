@@ -1,7 +1,3 @@
-/**
- * DTO для верификации SMS кода и регистрации/входа
- */
-
 import { IsNotEmpty, IsString, IsEnum, Matches, MinLength, IsOptional } from 'class-validator';
 import { UserRole } from '../../users/entities/user.entity';
 

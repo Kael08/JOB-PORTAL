@@ -33,7 +33,6 @@ const router = createBrowserRouter([
               throw new Response("Not Found", { status: 404 });
             }
             const data = await response.json();
-            // Обрабатываем ответ - может быть объект или массив
             return Array.isArray(data) ? data[0] : data;
           }
         },

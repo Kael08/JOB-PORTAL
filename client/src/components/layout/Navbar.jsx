@@ -19,20 +19,15 @@ const Navbar = () => {
         localStorage.setItem('language', lng);
     }
 
-    // Навигация зависит от роли пользователя
     const getNavItems = () => {
         const baseItems = [
             {path: "/", title: t('navbar.startSearch')},
         ];
 
-        // Показываем кнопки только для работодателей
         if (user?.role === 'employer') {
             baseItems.push({path: "/my-job", title: t('navbar.myJobs')});
             baseItems.push({path: "/post-job", title: t('navbar.postJob')});
         }
-
-        // Добавляем "О проекте" для всех
-        //baseItems.push({path: "/about", title: "О проекте"});
 
         return baseItems;
     };
@@ -52,7 +47,6 @@ const Navbar = () => {
                 />
                 <span className="">rabota.elistory.ru</span>
             </a>
-            {/* {NAV ITEMS FOR LARGE DEVICES} */}
             <ul className="hidden md:flex gap-12">
                 {
                     navItems.map(({path, title}) => (
@@ -68,7 +62,6 @@ const Navbar = () => {
                 }
             </ul>
 
-            {/* LOGIN BUTTON OR USER INFO */}
             <div className="text-base text-primary font-medium space-x-5 hidden lg:flex items-center">
                 {isAuthenticated ? (
                     <>
@@ -82,7 +75,6 @@ const Navbar = () => {
                         {t('navbar.login')}
                     </Link>
                 )}
-                {/* Language Switcher */}
                 <button
                     onClick={() => changeLanguage(i18n.language === 'klm' ? 'ru' : 'klm')}
                     className='py-2 px-5 border rounded bg-gray-100 hover:bg-gray-200 transition-colors'
@@ -92,7 +84,6 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {/* MOBILE MENU */}
             <div className="md:hidden block">
                 <button onClick={handleMenuToggler}>
                     {
@@ -102,7 +93,6 @@ const Navbar = () => {
             </div>
         </nav>
 
-        {/* NAV ITEMS FOR MOBILE */}
         <div className={`px-4 bg-black py-5 rounded-sm ${isMenuOpen ? "" : "hidden"} absolute top-full left-0 right-0 w-full`}>
             <ul className="">
             {navItems.map(({path, title}) => (

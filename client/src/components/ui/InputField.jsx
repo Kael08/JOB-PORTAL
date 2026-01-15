@@ -7,7 +7,6 @@ const InputField = ({handleChange, value, title, name}) => {
                 <input
                     type="radio"
                     name={name}
-                    // placeholder="placeholder"
                     value={value}
                     onChange={handleChange}
                 />

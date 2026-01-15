@@ -1,8 +1,3 @@
-/**
- * Сервис для работы с пользователями
- * Содержит методы для работы с БД
- */
-
 import { Injectable, Inject } from '@nestjs/common';
 import { Pool } from 'pg';
 import { DATABASE_POOL } from '../../common/db/database.module';
@@ -14,35 +9,18 @@ export class UsersService {
     @Inject(DATABASE_POOL) private readonly pool: Pool,
   ) {}
 
-  /**
-   * Поиск пользователя по номеру телефона
-   * @param phone - Номер телефона
-   * @returns Пользователь или null
-   */
   async findByPhone(phone: string): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE phone = $1';
     const result = await this.pool.query(query, [phone]);
     return result.rows.length > 0 ? result.rows[0] : null;
   }
 
-  /**
-   * Поиск пользователя по ID
-   * @param id - ID пользователя
-   * @returns Пользователь или null
-   */
   async findById(id: number): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE id = $1';
     const result = await this.pool.query(query, [id]);
     return result.rows.length > 0 ? result.rows[0] : null;
   }
 
-  /**
-   * Создание нового пользователя
-   * @param phone - Номер телефона
-   * @param name - Имя пользователя
-   * @param role - Роль пользователя
-   * @returns Созданный пользователь
-   */
   async create(phone: string, name: string, role: UserRole): Promise<User> {
     const query = `
       INSERT INTO users (phone, name, role)
@@ -53,12 +31,6 @@ export class UsersService {
     return result.rows[0];
   }
 
-  /**
-   * Сохранение кода верификации для пользователя
-   * @param phone - Номер телефона
-   * @param code - Код верификации
-   * @param expiresAt - Время истечения кода
-   */
   async saveVerificationCode(phone: string, code: string, expiresAt: Date): Promise<void> {
     const query = `
       UPDATE users
@@ -69,21 +41,12 @@ export class UsersService {
     await this.pool.query(query, [code, expiresAt, phone]);
   }
 
-  /**
-   * Создание временного пользователя с кодом верификации (для регистрации)
-   * Если пользователь с таким номером уже существует, обновляем код
-   * @param phone - Номер телефона
-   * @param code - Код верификации
-   * @param expiresAt - Время истечения кода
-   */
   async createOrUpdateVerificationCode(phone: string, code: string, expiresAt: Date): Promise<void> {
     const existingUser = await this.findByPhone(phone);
 
     if (existingUser) {
-      // Обновляем код для существующего пользователя
       await this.saveVerificationCode(phone, code, expiresAt);
     } else {
-      // Создаем запись с кодом (пользователь будет полностью создан после верификации)
       const query = `
         INSERT INTO users (phone, name, role, verification_code, verification_code_expires)
         VALUES ($1, $2, $3, $4, $5)
@@ -92,19 +55,10 @@ export class UsersService {
           verification_code = $4,
           verification_code_expires = $5
       `;
-      // Временные значения для name и role, будут обновлены после верификации
       await this.pool.query(query, [phone, 'Pending', 'job_seeker', code, expiresAt]);
     }
   }
 
-  /**
-   * Верификация кода и обновление данных пользователя
-   * @param phone - Номер телефона
-   * @param code - Код верификации
-   * @param name - Имя пользователя (опционально для существующих)
-   * @param role - Роль пользователя (опционально для существующих)
-   * @returns Пользователь или null если код неверен
-   */
   async verifyCodeAndUpdateUser(
     phone: string,
     code: string,
@@ -114,7 +68,6 @@ export class UsersService {
     const now = new Date();
     console.log('🔍 Проверка кода в БД:', { phone, code, текущееВремя: now });
 
-    // Сначала проверяем код
     const checkQuery = `
       SELECT * FROM users
       WHERE phone = $1
@@ -124,7 +77,6 @@ export class UsersService {
     const checkResult = await this.pool.query(checkQuery, [phone, code, now]);
 
     if (checkResult.rows.length === 0) {
-      // Проверим что вообще есть в БД
       const debugQuery = `SELECT phone, verification_code, verification_code_expires FROM users WHERE phone = $1`;
       const debugResult = await this.pool.query(debugQuery, [phone]);
 
@@ -151,14 +103,11 @@ export class UsersService {
     const user = checkResult.rows[0];
     console.log('✅ Код верный, пользователь найден:', user.name);
 
-    // Если пользователь новый (name = 'Pending'), обновляем данные
-    // Если существующий - только очищаем код
     let updateQuery: string;
     let params: any[];
 
     if (user.name === 'Pending') {
       console.log('📝 Новый пользователь, обновляем имя и роль');
-      // Новый пользователь - обновляем все данные
       if (!name || !role) {
         throw new Error('Имя и роль обязательны для новых пользователей');
       }
@@ -174,7 +123,6 @@ export class UsersService {
       params = [name, role, phone];
     } else {
       console.log('👤 Существующий пользователь, только очищаем код');
-      // Существующий пользователь - только очищаем код
       updateQuery = `
         UPDATE users
         SET verification_code = NULL,
@@ -190,10 +138,6 @@ export class UsersService {
     return result.rows.length > 0 ? result.rows[0] : null;
   }
 
-  /**
-   * Очистка кода верификации
-   * @param phone - Номер телефона
-   */
   async clearVerificationCode(phone: string): Promise<void> {
     const query = `
       UPDATE users
@@ -204,12 +148,6 @@ export class UsersService {
     await this.pool.query(query, [phone]);
   }
 
-  /**
-   * Смена роли пользователя
-   * @param userId - ID пользователя
-   * @param newRole - Новая роль
-   * @returns Обновленный пользователь
-   */
   async changeRole(userId: number, newRole: UserRole): Promise<User> {
     const query = `
       UPDATE users

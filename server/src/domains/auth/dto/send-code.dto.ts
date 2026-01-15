@@ -1,7 +1,3 @@
-/**
- * DTO для отправки SMS кода
- */
-
 import { IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class SendCodeDto {

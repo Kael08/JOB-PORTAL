@@ -5,7 +5,6 @@ const AboutPage = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-12">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">О проекте rabota.elistory.ru</h1>
           <p className="text-xl text-gray-600">
@@ -13,7 +12,6 @@ const AboutPage = () => {
           </p>
         </div>
 
-        {/* О проекте */}
         <section className="mb-12 bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">О платформе</h2>
           <p className="text-gray-700 mb-4">
@@ -27,7 +25,6 @@ const AboutPage = () => {
           </p>
         </section>
 
-        {/* Для соискателей */}
         <section className="mb-12 bg-blue-50 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-blue-900 mb-4">Для соискателей</h2>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -38,7 +35,6 @@ const AboutPage = () => {
           </ul>
         </section>
 
-        {/* Для работодателей */}
         <section className="mb-12 bg-green-50 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-green-900 mb-4">Для работодателей</h2>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -49,7 +45,6 @@ const AboutPage = () => {
           </ul>
         </section>
 
-        {/* Юридическая информация */}
         <section className="mb-12 bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Юридическая информация</h2>
 
@@ -106,7 +101,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Благодарности */}
         <section className="mb-12 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Благодарности</h2>
 
@@ -144,7 +138,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Контакты */}
         <section className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Контакты</h2>
           <p className="text-gray-700 mb-4">
@@ -157,7 +150,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Кнопка назад */}
         <div className="mt-12 text-center">
           <Link
             to="/"

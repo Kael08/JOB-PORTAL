@@ -12,7 +12,6 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const [isChangingRole, setIsChangingRole] = useState(false);
 
-  // Перенаправляем на логин, если пользователь не авторизован
   React.useEffect(() => {
     if(loading) return;
 
@@ -49,7 +48,6 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.patch(`/auth/change-role/${newRole}`);
         
-        // Обновляем пользователя и токен
         updateUser(response.user, response.access_token);
 
         await Swal.fire({
@@ -60,7 +58,6 @@ const ProfilePage = () => {
           showConfirmButton: false
         });
 
-        // Если меняли с работодателя на соискателя, показываем предупреждение
         if (currentRole === 'employer' && newRole === 'job_seeker') {
           await Swal.fire({
             icon: 'info',
@@ -71,7 +68,6 @@ const ProfilePage = () => {
           });
         }
 
-        // Перезагружаем страницу для обновления данных
         window.location.reload();
       } catch (error) {
         await Swal.fire({
@@ -93,7 +89,6 @@ const ProfilePage = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-12">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white">
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-blue-600 text-3xl font-bold">
@@ -108,7 +103,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-8">
             <h2 className="text-2xl font-bold mb-6">Личная информация</h2>
 
@@ -148,7 +142,6 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Действия */}
             <div className="flex gap-3">
               <button
                 onClick={() => navigate('/')}

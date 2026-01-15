@@ -27,7 +27,6 @@ const JobDetailsPage = () => {
           });
     }, [id])
 
-    // Format salary in rubles
     const formatSalary = (min, max) => {
       if (!min || !max) return 'N/A';
       const minVal = parseFloat(min);
@@ -35,7 +34,6 @@ const JobDetailsPage = () => {
       return `${Math.round(minVal).toLocaleString('ru-RU')} ₽ - ${Math.round(maxVal).toLocaleString('ru-RU')} ₽`;
     };
 
-    // Format date to DD month YYYY (e.g., "24 мая 2024")
     const formatDate = (dateString) => {
       if (!dateString) return 'N/A';
       const date = new Date(dateString);
@@ -49,7 +47,6 @@ const JobDetailsPage = () => {
       return `${day} ${month} ${year}`;
     };
 
-    // Translate experience level
     const translateExperienceLevel = (experienceLevel) => {
       if (!experienceLevel) return 'N/A';
       const experienceMap = {
@@ -61,7 +58,6 @@ const JobDetailsPage = () => {
       return experienceMap[experienceLevel] || experienceLevel;
     };
 
-    // Copy phone number to clipboard
     const handlePhoneClick = async (phoneNumber) => {
       try {
         await navigator.clipboard.writeText(phoneNumber);
@@ -73,7 +69,6 @@ const JobDetailsPage = () => {
           showConfirmButton: false
         });
       } catch (err) {
-        // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = phoneNumber;
         textArea.style.position = 'fixed';
@@ -138,7 +133,6 @@ const JobDetailsPage = () => {
         <PageHeader title={job.jobTitle} path={t('jobDetails.path')}/>
 
         <div className="mt-8 bg-white rounded-lg shadow-lg p-8">
-          {/* Header Section */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex gap-4">
               <div>
@@ -148,7 +142,6 @@ const JobDetailsPage = () => {
             </div>
           </div>
 
-          {/* Key Information Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 p-6 bg-gray-50 rounded-lg">
             <div className="flex items-center gap-3">
               <FiMapPin className="text-blue text-xl" />
@@ -225,7 +218,6 @@ const JobDetailsPage = () => {
             )}
           </div>
 
-          {/* Description Section */}
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('jobDetails.description')}</h3>
             <p className="text-gray-700 whitespace-pre-line leading-relaxed break-words" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
@@ -233,7 +225,6 @@ const JobDetailsPage = () => {
             </p>
           </div>
 
-          {/* Skills Section */}
           {job.skills && job.skills.length > 0 && (
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('createJob.requiredSkills')}</h3>
@@ -251,7 +242,6 @@ const JobDetailsPage = () => {
             </div>
           )}
 
-          {/* Contact Section */}
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('createJob.postedBy')}</h3>
             {isAuthenticated ? (

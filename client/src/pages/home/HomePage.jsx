@@ -25,73 +25,54 @@ const HomePage = () => {
     })
   }, [])
 
-  // console.log(jobs)
-
   const [query, setQuery] = useState("");
   const handleInputChange = (event) => {
     setQuery(event.target.value);
-    setCurrentPage(1); // Сбрасываем на первую страницу при изменении поиска
+    setCurrentPage(1);
   }
 
-  // Radio Filtering
   const handleChange = (event) => {
     setSelectedCategory(event.target.value);
-    setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
+    setCurrentPage(1);
   }
 
-  // Button based Filtering
   const handleClick = (event) => {
     setSelectedCategory(event.target.value);
-    setCurrentPage(1); // Сбрасываем на первую страницу при изменении фильтра
+    setCurrentPage(1);
   }
 
-  //Calculate the index range
   const calculatePageRange = () => {
     const startIndex = (currentPage -1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return {startIndex, endIndex};
   }
 
-  // Функция для получения полного списка отфильтрованных вакансий (без пагинации)
   const getAllFilteredJobs = (jobs, selected, query) => {
     let filteredJobs = jobs;
 
-    // Фильтрация по поисковому запросу (название вакансии)
     if(query){
       filteredJobs = filteredJobs.filter((job) => 
         job.jobTitle && job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     }
 
-    // Фильтрация по категориям
     if(selected) {
       filteredJobs = filteredJobs.filter(({city, minPrice, maxPrice, experienceLevel, salaryType, employmentType, postingDate}) => {
-        // Check if selected is a number (salary filter)
         const selectedNum = parseInt(selected);
         if (!isNaN(selectedNum)) {
-          // Фильтрация по зарплате
-          // Отрицательные значения означают "меньше" (<), положительные - "больше или равно" (>=)
           if (selectedNum < 0) {
-            // Для отрицательных значений: maxPrice < |selectedNum|
-            // Например, -20000 означает maxPrice < 20000
             return parseInt(maxPrice) < Math.abs(selectedNum);
           } else {
-            // Для положительных значений: maxPrice >= selectedNum
-            // Например, 80000 означает maxPrice >= 80000
             return parseInt(maxPrice) >= selectedNum;
           }
         }
 
-        // Check if selected is a date (YYYY-MM-DD format)
         if (/^\d{4}-\d{2}-\d{2}$/.test(selected)) {
-          // Convert both dates to Date objects for comparison
           const jobDate = new Date(postingDate);
           const filterDate = new Date(selected);
-          // Return jobs posted on or after the filter date
           return jobDate >= filterDate;
         }
 
-        // Otherwise, filter by other categories
         return (
           city.toLowerCase() === selected.toLowerCase() ||
           salaryType.toLowerCase() === selected.toLowerCase() ||
@@ -104,27 +85,22 @@ const HomePage = () => {
     return filteredJobs;
   }
 
-  // Получаем полный список отфильтрованных вакансий
   const allFilteredJobs = getAllFilteredJobs(jobs, selectedCategory, query);
   
-  // Вычисляем количество страниц на основе отфильтрованных вакансий
   const totalPages = Math.ceil(allFilteredJobs.length / itemsPerPage);
 
-  // Function for the next page
   const nextPage = () => {
     if (currentPage < totalPages){
       setCurrentPage(currentPage + 1);
     }
   }
 
-  // Function for the previous page
   const prevPage = () => {
     if(currentPage > 1){
       setCurrentPage(currentPage - 1);
     }
   }
 
-  // Функция для получения данных с пагинацией
   const getPaginatedData = () => {
     const {startIndex, endIndex} = calculatePageRange();
     const paginatedJobs = allFilteredJobs.slice(startIndex, endIndex);
@@ -133,7 +109,6 @@ const HomePage = () => {
 
   const result = getPaginatedData();
   
-  // Сбрасываем страницу на 1, если текущая страница больше доступных страниц
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(1);
@@ -144,14 +119,11 @@ const HomePage = () => {
     <div>
       <JobSearchBar query={query} handleInputChange={handleInputChange} />
     
-    {/* Main Content */}
     <div className="bg-[#FAFAFA] flex flex-col md:flex-row gap-4 lg:px-24 px-4 py-12">
-      {/* Left Side - Фильтры с фиксированной шириной */}
      <div className="bg-white p-4 rounded w-full md:w-64 flex-shrink-0">
       <JobFilters handleChange={handleChange} handleClick={handleClick}/>
      </div>
 
-     {/* Jobs Cards */}
      <div className="bg-white p-4 rounded-sm flex-1 min-w-0">
 
       {
@@ -166,8 +138,6 @@ const HomePage = () => {
           </>
         )
       }
-
-      {/* PAGINATION */}
 
       {
         allFilteredJobs.length > 0 ? (

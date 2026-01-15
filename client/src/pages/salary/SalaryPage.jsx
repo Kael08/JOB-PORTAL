@@ -7,11 +7,9 @@ const SalaryPage = () => {
   const [searchText, setSearchText] = useState("");
   const [salary, setSalary] = useState([]);
 
-  // Function to convert salary from USD to RUB
   const convertSalary = (salaryString) => {
     const currentLang = i18n.language;
 
-    // Extract number from string like "Average Salary $34,331 per year"
     const match = salaryString.match(/\$([0-9,]+)/);
     if (!match) return salaryString;
 
@@ -50,8 +48,8 @@ const SalaryPage = () => {
                 className="py-2 pl-3 border focus-within:ring-indigo-600
                 lg:w-6/12 mb-4 w-full"
                 onChange={e => setSearchText(e.target.value)}
-                style={{ // Inline style to set focus ring color
-                  outlineColor: '#4F46E5', // Replace with your desired blue color
+                style={{
+                  outlineColor: '#4F46E5',
                 }}
             />
             <button onClick={handleSearch} className="bg-blue text-white font-semibold px-8 py-2 rounded-sm mb-4">
@@ -59,8 +57,7 @@ const SalaryPage = () => {
             </button>
         </div>
     </div>
-    
-    {/* Salary Display Card */}
+
     <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-12 my-12 items-center">
       {
         salary.map((data) => (

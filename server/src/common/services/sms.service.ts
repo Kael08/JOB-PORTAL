@@ -1,7 +1,3 @@
-/**
- * Сервис для отправки SMS через SMS.ru
- */
-
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
@@ -18,22 +14,13 @@ export class SmsService {
     this.testMode = this.configService.get<string>('SMSRU_TEST_MODE') === 'true';
   }
 
-  /**
-   * Генерация 4-значного кода верификации
-   */
   generateVerificationCode(): string {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
 
-  /**
-   * Отправка SMS с кодом верификации
-   * @param phone - Номер телефона в формате +79991234567
-   * @param code - Код верификации
-   */
   async sendVerificationCode(phone: string, code: string): Promise<boolean> {
     const message = `Ваш код подтверждения: ${code}. Никому не сообщайте этот код.`;
 
-    // В тестовом режиме просто логируем код в консоль
     if (this.testMode) {
       this.logger.log(`[TEST MODE] SMS для ${phone}: ${message}`);
       this.logger.warn(`Код верификации для ${phone}: ${code}`);
@@ -56,7 +43,6 @@ export class SmsService {
 
       this.logger.log(`Ответ от SMS.ru: ${JSON.stringify(response.data)}`);
 
-      // SMS.ru возвращает status_code в ответе
       if (response.data.status === 'OK' || response.data.status_code === 100) {
         this.logger.log(`✅ SMS успешно отправлено на ${phone}`);
         return true;
