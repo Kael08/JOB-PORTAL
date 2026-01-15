@@ -32,7 +32,7 @@ server {
 
     # 1. index.html - НИКОГДА не кешируем (это критически важно для SPA)
     location = /index.html {
-        internal;
+        # УБРАЛИ internal - теперь доступен напрямую (важно для SPA)
         add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
         add_header Pragma "no-cache" always;
         add_header Expires "0" always;
