@@ -30,13 +30,12 @@ server {
 
     root /home/job-portal/client/dist;
 
-    # 1. index.html - НИКОГДА не кешируем (это критически важно для SPA)
+    # 1. index.html - НИКОГДА не кешируем (критично для SPA, иначе "залипает" после деплоя)
     location = /index.html {
-        # УБРАЛИ internal - теперь доступен напрямую (важно для SPA)
-        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+        add_header Cache-Control "private, no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
         add_header Pragma "no-cache" always;
         add_header Expires "0" always;
-        # Важно: повторяем security headers так как add_header перезаписывает
+        add_header Vary "*" always;
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header X-Frame-Options "SAMEORIGIN" always;
         add_header X-Content-Type-Options "nosniff" always;
@@ -73,7 +72,7 @@ server {
         try_files $uri $uri/ /index.html;
         
         # Для index.html и fallback - не кешируем
-        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+        add_header Cache-Control "private, no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
         add_header Pragma "no-cache" always;
         add_header Expires "0" always;
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;

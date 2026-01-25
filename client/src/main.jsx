@@ -13,15 +13,3 @@ root.render(
     <RouterProvider router={router} />
   </AuthProvider>,
 );
-
-if (window.__NEEDS_RELOAD__) {
-  setTimeout(() => {
-    const rootElement = document.getElementById('root');
-    if (rootElement && rootElement.children.length > 0) {
-      console.log('[Cache] React mounted, reloading with cache bust...');
-      window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
-    } else {
-      window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
-    }
-  }, 500);
-}

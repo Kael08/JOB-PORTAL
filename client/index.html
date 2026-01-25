@@ -63,9 +63,9 @@
           });
           localStorage.setItem('app_version', APP_VERSION);
           
-          // 6. ВАЖНО: НЕ делаем редирект здесь! Ждем загрузки React
-          // Редирект будет выполнен после монтирования React в main.jsx
-          window.__NEEDS_RELOAD__ = true;
+          // 6. Редирект сразу, не ждём React (иначе при 404 на JS страница "залипает")
+          location.reload();
+          return;
         }
         
         // Определяем нужна ли очистка
